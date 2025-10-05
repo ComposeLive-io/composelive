@@ -1,0 +1,18 @@
+package io.composelive.designsystem.core.api
+
+import androidx.compose.runtime.Immutable
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
+@[JvmInline Immutable Serializable]
+public value class TextUnit(public val value: Double) {
+    public constructor(value: Float) : this(value.toDouble())
+
+    public companion object {
+        public val Unspecified: TextUnit = TextUnit(-1.0)
+    }
+}
+
+public val Float.sp: TextUnit get() = TextUnit(this)
+public val Double.sp: TextUnit get() = TextUnit(this)
+public val Int.sp: TextUnit get() = TextUnit(this.toDouble())

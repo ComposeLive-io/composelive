@@ -1,0 +1,72 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.composelive.designsystem.core.compose.lazygrid
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
+import io.composelive.designsystem.core.compose.LazyGridItemScope
+import io.composelive.designsystem.core.compose.lazygrid.layout.LazyLayoutItemProvider
+
+// Copied from https://github.com/androidx/androidx/blob/a733905d282ecdba574bc5e35d6b0ebf83c82dcd/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/lazy/LazyListItemProvider.kt
+// Removed support for content types, header indices, item scope, and pinnable items.
+
+internal interface LazyGridItemProvider : LazyLayoutItemProvider {
+    fun spans(): List<GridItemSpan>
+}
+
+@Composable
+internal fun rememberLazyListItemProvider(
+    content: LazyGridScope.() -> Unit,
+): LazyGridItemProvider {
+    val latestContent = rememberUpdatedState(content)
+    return remember(latestContent) {
+        LazyGridItemProviderImpl(
+            latestContent = { latestContent.value },
+        )
+    }
+}
+
+private class LazyGridItemProviderImpl(
+    private val latestContent: () -> (LazyGridScope.() -> Unit),
+) : LazyGridItemProvider {
+    private val listContent by derivedStateOf(referentialEqualityPolicy()) {
+        LazyGridIntervalContent(latestContent())
+    }
+
+    override val itemCount: Int get() = listContent.itemCount
+
+    @Composable
+    override fun Item(scope: LazyGridItemScope, index: Int) {
+        listContent.withInterval(index) { localIndex, intervalIndex, content ->
+            content.item(localIndex)
+        }
+    }
+
+    override fun spans(): List<GridItemSpan> =
+        buildList {
+            listContent.intervals.forEach { interval ->
+                for (index in 0 until interval.size) {
+                    val span = interval.span?.invoke(index) ?: GridItemSpan.SINGLE
+                    add(span)
+                }
+            }
+        }
+}

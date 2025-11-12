@@ -15,7 +15,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiPullToRefreshBox(
+public class ComposeUiPullToRefreshBox(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : PullToRefreshBox<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

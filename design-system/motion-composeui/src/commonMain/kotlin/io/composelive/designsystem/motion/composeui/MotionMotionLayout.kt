@@ -25,7 +25,7 @@ import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.MotionSceneScope
 import io.composelive.designsystem.core.api.MotionProgress
-import io.composelive.designsystem.core.composeui.local.findMotionProgressState
+import io.composelive.designsystem.core.composeui.local.rememberMotionProgressState
 import io.composelive.designsystem.core.composeui.toDp
 import io.composelive.designsystem.motion.api.Anchorable
 import io.composelive.designsystem.motion.api.ConstraintSet
@@ -40,7 +40,7 @@ public fun MotionMotionLayout(
     modifier: Modifier,
     content: @Composable MotionLayoutScope.() -> Unit,
 ) {
-    val motionProgressState = if (progress != null) findMotionProgressState(progress.id) else null
+    val motionProgressState = if (progress != null) rememberMotionProgressState(progress.id) else null
     MotionLayout(
         motionScene = remember(motionScene) { motionScene?.toMotionScene() ?: MotionScene {} },
         modifier = modifier,

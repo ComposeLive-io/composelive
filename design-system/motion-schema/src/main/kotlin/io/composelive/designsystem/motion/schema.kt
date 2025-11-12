@@ -21,9 +21,9 @@ import app.cash.redwood.schema.Property
 import app.cash.redwood.schema.Schema
 import app.cash.redwood.schema.Schema.Dependency
 import app.cash.redwood.schema.Widget
-import io.composelive.designsystem.motion.api.MotionScene
 import io.composelive.designsystem.core.Core
 import io.composelive.designsystem.core.api.MotionProgress
+import io.composelive.designsystem.motion.api.MotionScene
 
 @Schema(
     members = [
@@ -33,10 +33,10 @@ import io.composelive.designsystem.core.api.MotionProgress
         Dependency(1, Core::class),
     ],
 )
-public interface Motion
+interface Motion
 
 @Widget(1)
-public data class MotionLayout(
+data class MotionLayout(
     @Property(1) val motionScene: MotionScene? = null,
     @Property(2) val progress: MotionProgress? = null,
     @Children(1) val content: @Composable () -> Unit,

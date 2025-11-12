@@ -13,7 +13,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiAsyncImage(
+public class ComposeUiAsyncImage(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : AsyncImage<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

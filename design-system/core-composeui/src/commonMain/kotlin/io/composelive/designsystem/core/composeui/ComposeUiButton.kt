@@ -17,7 +17,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiButton(
+public class ComposeUiButton(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : Button<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

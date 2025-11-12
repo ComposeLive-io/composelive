@@ -16,7 +16,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiMotionLayout(
+public class ComposeUiMotionLayout(
   private val factory: AbstractComposeUiMotionWidgetFactory,
 ) : MotionLayout<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

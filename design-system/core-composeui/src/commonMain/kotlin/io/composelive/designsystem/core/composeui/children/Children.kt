@@ -1,47 +1,34 @@
 package io.composelive.designsystem.core.composeui.children
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import app.cash.redwood.widget.Widget
-import app.cash.redwood.widget.compose.ComposeWidgetChildren
+import io.composelive.designsystem.core.widget.helpers.move
+import io.composelive.designsystem.core.widget.helpers.remove
 
-public class Children private constructor(
-    private val children: ComposeWidgetChildren
-) : Widget.Children<@Composable (Modifier) -> Unit> {
+public class Children : Widget.Children<@Composable (Modifier) -> Unit> {
+    public var modifierTick: Tick = Tick()
 
-    public constructor() : this(children = ComposeWidgetChildren())
+    private val _widgets = mutableStateListOf<Widget<@Composable (Modifier) -> Unit>>()
+    override val widgets: List<Widget<@Composable (Modifier) -> Unit>> get() = _widgets
 
-    public var modifierTick: Int by mutableIntStateOf(0)
-
-    override val widgets: List<Widget<@Composable ((Modifier) -> Unit)>>
-        get() = children.widgets
-
-    override fun insert(
-        index: Int,
-        widget: Widget<@Composable ((Modifier) -> Unit)>
-    ) {
-        children.insert(index, widget)
+    override fun insert(index: Int, widget: Widget<@Composable (Modifier) -> Unit>) {
+        _widgets.add(index, widget)
     }
 
     override fun move(fromIndex: Int, toIndex: Int, count: Int) {
-        children.move(fromIndex, toIndex, count)
+        _widgets.move(fromIndex, toIndex, count)
     }
 
     override fun remove(index: Int, count: Int) {
-        children.remove(index, count)
+        _widgets.remove(index, count)
     }
 
-    override fun onModifierUpdated(
-        index: Int,
-        widget: Widget<@Composable ((Modifier) -> Unit)>
-    ) {
-        modifierTick++
+    override fun onModifierUpdated(index: Int, widget: Widget<@Composable (Modifier) -> Unit>) {
+        modifierTick.trigger()
     }
 
     override fun detach() {
-        children.detach()
     }
 }

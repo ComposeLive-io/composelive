@@ -17,7 +17,7 @@ package io.composelive.designsystem.core.compose.lazygrid.layout
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import io.composelive.designsystem.core.compose.LazyGridItemScope
+import io.composelive.designsystem.core.compose.lazygrid.LazyGridIntervalContent
 
 // Copied from https://github.com/androidx/androidx/blob/a733905d282ecdba574bc5e35d6b0ebf83c82dcd/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/lazy/layout/LazyLayoutItemProvider.kt
 // Removed support for content types.
@@ -38,5 +38,7 @@ internal interface LazyLayoutItemProvider {
      * The item for the given [index].
      */
     @Composable
-    fun Item(scope: LazyGridItemScope, index: Int)
+    fun Item(index: Int)
+
+    val listContent: LazyGridIntervalContent
 }

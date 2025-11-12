@@ -3,9 +3,6 @@ plugins {
     alias(libs.plugins.redwoodSchema)
 }
 
-kotlin {
-    explicitApi()
-}
 
 dependencies {
     api(projects.designSystem.coreApi)

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.composelive.designsystem.core.compose.lazygrid
+package io.composelive.designsystem.core.compose
 
 import androidx.compose.runtime.Composable
 import app.cash.redwood.LayoutScopeMarker
@@ -21,9 +21,9 @@ import app.cash.redwood.Modifier
 import io.composelive.designsystem.core.api.Arrangement
 import io.composelive.designsystem.core.api.MotionProgress
 import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
-import io.composelive.designsystem.core.compose.Box
-import io.composelive.designsystem.core.compose.LazyGrid
-import io.composelive.designsystem.core.compose.LazyGridItemScopeImpl.stickyHeader
+import io.composelive.designsystem.core.compose.lazygrid.LazyGrid
+import io.composelive.designsystem.core.compose.lazygrid.LazyGridState
+import io.composelive.designsystem.core.compose.lazygrid.rememberLazyGridState
 
 /**
  * Receiver scope which is used by [LazyVerticalGrid] and [LazyHorizontalGrid].
@@ -36,7 +36,7 @@ public interface LazyGridScope {
      * @param content The content of the item.
      */
     public fun item(
-        span: ((Int) -> GridItemSpan)? = null,
+        span: () -> GridItemSpan? = { null },
         content: @Composable () -> Unit,
     )
 
@@ -48,17 +48,9 @@ public interface LazyGridScope {
      */
     public fun items(
         count: Int,
-        span: ((Int) -> GridItemSpan)? = null,
+        placeholder: @Composable () -> Unit = {},
         itemContent: @Composable (index: Int) -> Unit,
     )
-}
-
-public inline fun LazyGridScope.stickyHeader(
-    crossinline itemContent: @Composable () -> Unit,
-): Unit = item {
-    Box(modifier = Modifier.stickyHeader()) {
-        itemContent()
-    }
 }
 
 /**
@@ -69,10 +61,15 @@ public inline fun LazyGridScope.stickyHeader(
  */
 public inline fun <T> LazyGridScope.items(
     items: List<T>,
+    noinline placeholder: @Composable () -> Unit = {},
     crossinline itemContent: @Composable (item: T) -> Unit,
-): Unit = items(items.size) {
-    itemContent(items[it])
-}
+): Unit = items(
+    items.size,
+    placeholder = placeholder,
+    itemContent = {
+        itemContent(items[it])
+    }
+)
 
 /**
  * Adds a list of items where the content of an item is aware of its index.
@@ -82,14 +79,15 @@ public inline fun <T> LazyGridScope.items(
  */
 public inline fun <T> LazyGridScope.itemsIndexed(
     items: List<T>,
-    noinline span: ((Int) -> GridItemSpan)? = null,
+    noinline placeholder: @Composable () -> Unit = {},
     crossinline itemContent: @Composable (index: Int, item: T) -> Unit,
 ): Unit = items(
     items.size,
-    span,
-) {
-    itemContent(it, items[it])
-}
+    placeholder = placeholder,
+    itemContent = {
+        itemContent(it, items[it])
+    },
+)
 
 /**
  * Adds an array of items.
@@ -99,12 +97,15 @@ public inline fun <T> LazyGridScope.itemsIndexed(
  */
 public inline fun <T> LazyGridScope.items(
     items: Array<T>,
+    noinline placeholder: @Composable () -> Unit = {},
     crossinline itemContent: @Composable (item: T) -> Unit,
 ): Unit = items(
     items.size,
-) {
-    itemContent(items[it])
-}
+    placeholder = placeholder,
+    itemContent = {
+        itemContent(items[it])
+    },
+)
 
 /**
  * Adds an array of items where the content of an item is aware of its index.
@@ -114,12 +115,15 @@ public inline fun <T> LazyGridScope.items(
  */
 public inline fun <T> LazyGridScope.itemsIndexed(
     items: Array<T>,
+    noinline placeholder: @Composable () -> Unit = {},
     crossinline itemContent: @Composable (index: Int, item: T) -> Unit,
 ): Unit = items(
     items.size,
-) {
-    itemContent(it, items[it])
-}
+    placeholder = placeholder,
+    itemContent = {
+        itemContent(it, items[it])
+    },
+)
 
 @RequiresOptIn("This Redwood LazyLayout API is experimental and may change in the future.")
 public annotation class ExperimentalRedwoodLazyLayoutApi
@@ -127,7 +131,7 @@ public annotation class ExperimentalRedwoodLazyLayoutApi
 /**
  * The horizontally scrolling list that only composes and lays out the currently visible items.
  * The [content] block defines a DSL which allows you to emit items of different types. For
- * example you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
+ * example, you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
  * a list of items.
  *
  * The purpose of [placeholder] is to define the temporary content of an on-screen item while the
@@ -135,14 +139,10 @@ public annotation class ExperimentalRedwoodLazyLayoutApi
  * of that item has been retrieved, the [placeholder] is replaced with that of the content.
  *
  * @param state The state object to be used to control or observe the list's state.
- * @param width Sets whether the row's width will wrap its contents ([Constraint.Wrap]) or match the
- * width of its parent ([Constraint.Fill]).
- * @param height Sets whether the row's height will wrap its contents ([Constraint.Wrap]) or match
- * the height of its parent ([Constraint.Fill]).
- * @param margin Applies margin (space) around the list. This can also be applied to an individual
- * item using `Modifier.margin`.
- * @param verticalAlignment the vertical alignment applied to the items.
  * @param modifier The modifier to apply to this layout.
+ * @param placeholder A block which describes the content of each placeholder item. Note that the
+ * placeholder block will be invoked multiple times, and assumes that the content and its sizing on
+ * each invocation is identical to one another.
  * @param content A block which describes the content. Inside this block you can use methods like
  * [LazyGridScope.item] to add a single item or [LazyGridScope.items] to add a list of items.
  */
@@ -150,7 +150,7 @@ public annotation class ExperimentalRedwoodLazyLayoutApi
 public fun LazyHorizontalGrid(
     modifier: Modifier = Modifier,
     state: LazyGridState = rememberLazyGridState(),
-    rows: Int,
+    rows: Int = 1,
     horizontalArrangement: Arrangement? = null,
     verticalArrangement: Arrangement? = null,
     boundMotionProgress: MotionProgress? = null,
@@ -171,7 +171,7 @@ public fun LazyHorizontalGrid(
 /**
  * The vertically scrolling list that only composes and lays out the currently visible items.
  * The [content] block defines a DSL which allows you to emit items of different types. For
- * example you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
+ * example, you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
  * a list of items.
  *
  * The purpose of [placeholder] is to define the temporary content of an on-screen item while the
@@ -179,14 +179,10 @@ public fun LazyHorizontalGrid(
  * of that item has been retrieved, the [placeholder] is replaced with that of the content.
  *
  * @param state The state object to be used to control or observe the list's state.
- * @param width Sets whether the row's width will wrap its contents ([Constraint.Wrap]) or match the
- * width of its parent ([Constraint.Fill]).
- * @param height Sets whether the row's height will wrap its contents ([Constraint.Wrap]) or match
- * the height of its parent ([Constraint.Fill]).
- * @param margin Applies margin (space) around the list. This can also be applied to an individual
- * item using `Modifier.margin`.
- * @param horizontalAlignment The horizontal alignment applied to the items.
  * @param modifier The modifier to apply to this layout.
+ * @param placeholder A block which describes the content of each placeholder item. Note that the
+ * placeholder block will be invoked multiple times, and assumes that the content and its sizing on
+ * each invocation is identical to one another.
  * @param content A block which describes the content. Inside this block you can use methods like
  * [LazyGridScope.item] to add a single item or [LazyGridScope.items] to add a list of items.
  */
@@ -194,7 +190,7 @@ public fun LazyHorizontalGrid(
 public fun LazyVerticalGrid(
     modifier: Modifier = Modifier,
     state: LazyGridState = rememberLazyGridState(),
-    columns: Int,
+    columns: Int = 1,
     horizontalArrangement: Arrangement? = null,
     verticalArrangement: Arrangement? = null,
     boundMotionProgress: MotionProgress? = null,

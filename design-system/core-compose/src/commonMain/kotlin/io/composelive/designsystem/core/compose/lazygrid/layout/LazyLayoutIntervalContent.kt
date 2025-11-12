@@ -35,11 +35,11 @@ internal abstract class LazyLayoutIntervalContent<Interval : LazyLayoutIntervalC
      */
     inline fun <T> withInterval(
         globalIndex: Int,
-        block: (localIntervalIndex: Int, intervalIndex: Int, content: Interval) -> T
+        block: (localIntervalIndex: Int, content: Interval) -> T
     ): T {
         val interval = intervals[globalIndex]
         val localIntervalIndex = globalIndex - interval.startIndex
-        return block(localIntervalIndex, interval.index, interval.value)
+        return block(localIntervalIndex, interval.value)
     }
 
     /**

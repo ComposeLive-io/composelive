@@ -3,4 +3,6 @@ package io.composelive.designsystem.core.api
 import app.cash.redwood.ui.Dp
 import app.cash.redwood.ui.dp
 
-public val Dp.Companion.Unspecified: Dp get() = Int.MAX_VALUE.dp
+public val Dp.Companion.Unspecified: Dp get() = DP_UNSPECIFIED.dp
+
+public const val DP_UNSPECIFIED: Int = Int.MAX_VALUE

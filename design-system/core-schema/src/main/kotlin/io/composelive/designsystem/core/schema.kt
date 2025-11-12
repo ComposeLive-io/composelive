@@ -25,6 +25,7 @@ import app.cash.redwood.schema.Schema
         Row::class,
         Spacer::class,
         LazyGrid::class,
+        LazyItems::class,
         Pager::class,
         PullToRefreshBox::class,
         Scaffold::class,
@@ -38,6 +39,7 @@ import app.cash.redwood.schema.Schema
         MotionProgressHolder::class,
 
         // Modifiers
+        Reuse::class,
         Padding::class,
         AlignHorizontally::class,
         AlignVertically::class,
@@ -58,4 +60,4 @@ import app.cash.redwood.schema.Schema
         LayoutId::class,
     ],
 )
-public interface Core
+interface Core

@@ -32,8 +32,9 @@ import io.composelive.designsystem.core.modifier.Padding
 import io.composelive.designsystem.core.modifier.Shimmer
 import io.composelive.designsystem.core.modifier.Width
 import io.composelive.designsystem.core.modifier.WrapContentHeight
+import io.composelive.designsystem.core.widget.LazyGrid
+import io.composelive.designsystem.core.widget.LazyItems
 import io.composelive.designsystem.core.widget.MotionProgressHolder
-import kotlinx.collections.immutable.toImmutableList
 
 public class ComposeUiCoreWidgetFactory(
     private val imageLoader: ImageLoader,
@@ -87,40 +88,68 @@ public class ComposeUiCoreWidgetFactory(
     @Composable
     override fun LazyGridBinding(
         isVertical: Boolean,
-        onViewportChanged: (Int, Int) -> Unit,
-        programmaticScrollIndex: ScrollItemIndex?,
+        onViewportChanged: (Int, Int, Int) -> Unit,
+        lastReceivedViewportChangedId: Int,
+        scrollItemIndex: ScrollItemIndex?,
         chunks: Int,
         horizontalArrangement: Arrangement?,
         verticalArrangement: Arrangement?,
-        spans: List<GridItemSpan>,
         boundMotionProgress: MotionProgress?,
         items: Children,
-        modifier: Modifier,
+        modifier: Modifier
     ) {
-        val spans = spans.toImmutableList()
-        CoreLazyGrid(
-            isVertical = isVertical,
-            onViewportChanged = onViewportChanged,
-            programmaticScrollIndex = programmaticScrollIndex,
-            chunks = chunks,
-            horizontalArrangement = horizontalArrangement,
-            verticalArrangement = verticalArrangement,
-            boundMotionProgress = boundMotionProgress,
-            modifier = modifier,
-            content = lazyGridItems(
-                itemCount = items.widgets.size,
-                spans = spans,
-                isStickyHeader = { index ->
-                    val widget = items.widgets[index]
-                    isStickyHeader(widget)
-                },
-                item = { index ->
-                    val widget = items.widgets[index]
-                    widget.value.invoke(applyDefaultRedwoodModifier(Modifier, widget.modifier))
-                },
-            ),
-        )
+        TODO("Not yet implemented")
     }
+
+    @Composable
+    override fun LazyItemsBinding(
+        itemsBefore: Int,
+        itemsAfter: Int,
+        span: GridItemSpan?,
+        placeholder: Children,
+        items: Children,
+        modifier: Modifier
+    ) {
+        TODO("Not yet implemented")
+    }
+
+//    @Composable
+//    override fun LazyGridBinding(
+//        isVertical: Boolean,
+//        onViewportChanged: (Int, Int) -> Unit,
+//        scrollIndex: ScrollItemIndex,
+//        chunks: Int,
+//        horizontalArrangement: Arrangement?,
+//        verticalArrangement: Arrangement?,
+//        spans: List<GridItemSpan>,
+//        boundMotionProgress: MotionProgress?,
+//        items: Children,
+//        modifier: Modifier,
+//    ) {
+//        val spans = spans.toImmutableList()
+//        CoreLazyGrid(
+//            isVertical = isVertical,
+//            onViewportChanged = onViewportChanged,
+//            programmaticScrollIndex = programmaticScrollIndex,
+//            chunks = chunks,
+//            horizontalArrangement = horizontalArrangement,
+//            verticalArrangement = verticalArrangement,
+//            boundMotionProgress = boundMotionProgress,
+//            modifier = modifier,
+//            content = lazyGridItems(
+//                itemCount = items.widgets.size,
+//                spans = spans,
+//                isStickyHeader = { index ->
+//                    val widget = items.widgets[index]
+//                    isStickyHeader(widget)
+//                },
+//                item = { index ->
+//                    val widget = items.widgets[index]
+//                    widget.value.invoke(applyDefaultRedwoodModifier(Modifier, widget.modifier))
+//                },
+//            ),
+//        )
+//    }
 
     @Composable
     override fun PagerBinding(
@@ -129,8 +158,9 @@ public class ComposeUiCoreWidgetFactory(
         pageChanged: (Int) -> Unit,
         scrollInProgressChanged: (Boolean) -> Unit,
         programmaticScrollIndex: ScrollItemIndex?,
+        pageCount: Int,
         items: Children,
-        modifier: Modifier,
+        modifier: Modifier
     ) {
         CorePager(
             isVertical = isVertical,
@@ -138,7 +168,7 @@ public class ComposeUiCoreWidgetFactory(
             pageChanged = pageChanged,
             scrollInProgressChanged = scrollInProgressChanged,
             programmaticScrollIndex = programmaticScrollIndex,
-            pageCount = items.widgets.size,
+            pageCount = pageCount,
             item = { index ->
                 val widget = items.widgets[index]
                 widget.value(applyDefaultRedwoodModifier(Modifier, widget.modifier))
@@ -404,5 +434,13 @@ public class ComposeUiCoreWidgetFactory(
         modifier: LayoutId
     ) {
         // Do nothing
+    }
+
+    override fun LazyGrid(): LazyGrid<@Composable ((Modifier) -> Unit)> {
+        return CoreLazyGrid()
+    }
+
+    override fun LazyItems(): LazyItems<@Composable ((Modifier) -> Unit)> {
+        return CoreLazyItems()
     }
 }

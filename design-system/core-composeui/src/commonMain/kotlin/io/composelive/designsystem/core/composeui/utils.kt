@@ -163,15 +163,18 @@ public fun PaddingValues.toRedwoodPaddingValues(): RedwoodPaddingValues {
     )
 }
 
-public fun RedwoodShape.toShape(): Shape = when (this) {
-    is RedwoodShape.RoundedCorner -> RoundedCornerShape(
-        topStart = topStart.toDp(),
-        topEnd = topEnd.toDp(),
-        bottomEnd = bottomEnd.toDp(),
-        bottomStart = bottomStart.toDp(),
+public fun RedwoodShape.toShape(): Shape = when {
+    roundedCorner != null -> RoundedCornerShape(
+        topStart = roundedCorner!!.topStart.toDp(),
+        topEnd = roundedCorner!!.topEnd.toDp(),
+        bottomEnd = roundedCorner!!.bottomEnd.toDp(),
+        bottomStart = roundedCorner!!.bottomStart.toDp(),
     )
-    RedwoodShape.Rectangle -> RectangleShape
-    RedwoodShape.Circle -> CircleShape
+
+    rectangle != null -> RectangleShape
+    circle != null -> CircleShape
+
+    else -> RectangleShape
 }
 
 public fun RedwoodColor.toColor(): Color =
@@ -197,9 +200,10 @@ public inline fun <TScope> TScope.ComposeChildren(
 ) {
     if (children.widgets.isNotEmpty()) {
         WithLocalMotionProgressHolders(children) {
-            children.modifierTick
-            children.widgets.forEach { widget ->
-                widget.value(applyModifier(widget))
+            children.modifierTick.Listen {
+                children.widgets.forEach { widget ->
+                    widget.value(applyModifier(widget))
+                }
             }
         }
     }

@@ -21,52 +21,40 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
-import io.composelive.designsystem.core.compose.LazyGridItemScope
+import io.composelive.designsystem.core.compose.LazyGridScope
 import io.composelive.designsystem.core.compose.lazygrid.layout.LazyLayoutItemProvider
 
 // Copied from https://github.com/androidx/androidx/blob/a733905d282ecdba574bc5e35d6b0ebf83c82dcd/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/lazy/LazyListItemProvider.kt
 // Removed support for content types, header indices, item scope, and pinnable items.
 
-internal interface LazyGridItemProvider : LazyLayoutItemProvider {
-    fun spans(): List<GridItemSpan>
-}
+internal interface LazyListItemProvider : LazyLayoutItemProvider
 
 @Composable
 internal fun rememberLazyListItemProvider(
     content: LazyGridScope.() -> Unit,
-): LazyGridItemProvider {
+): LazyListItemProviderImpl {
     val latestContent = rememberUpdatedState(content)
     return remember(latestContent) {
-        LazyGridItemProviderImpl(
+        LazyListItemProviderImpl(
             latestContent = { latestContent.value },
         )
     }
 }
 
-private class LazyGridItemProviderImpl(
+internal class LazyListItemProviderImpl(
     private val latestContent: () -> (LazyGridScope.() -> Unit),
-) : LazyGridItemProvider {
-    private val listContent by derivedStateOf(referentialEqualityPolicy()) {
+) : LazyListItemProvider {
+
+    override val listContent: LazyGridIntervalContent by derivedStateOf(referentialEqualityPolicy()) {
         LazyGridIntervalContent(latestContent())
     }
 
     override val itemCount: Int get() = listContent.itemCount
 
     @Composable
-    override fun Item(scope: LazyGridItemScope, index: Int) {
-        listContent.withInterval(index) { localIndex, intervalIndex, content ->
+    override fun Item(index: Int) {
+        listContent.withInterval(index) { localIndex, content ->
             content.item(localIndex)
         }
     }
-
-    override fun spans(): List<GridItemSpan> =
-        buildList {
-            listContent.intervals.forEach { interval ->
-                for (index in 0 until interval.size) {
-                    val span = interval.span?.invoke(index) ?: GridItemSpan.SINGLE
-                    add(span)
-                }
-            }
-        }
 }

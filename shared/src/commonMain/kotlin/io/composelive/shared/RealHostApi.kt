@@ -8,7 +8,7 @@ class RealHostApi(
     private val openUrl: (url: String) -> Unit,
 ) : HostApi {
 
-    private val redwoodClient = httpClientImpl(client)
+    private val redwoodClient = RedwoodHttpClientImpl(client)
 
     override suspend fun httpCall(url: String, headers: Map<String, String>): String {
         return redwoodClient.call(url, headers)

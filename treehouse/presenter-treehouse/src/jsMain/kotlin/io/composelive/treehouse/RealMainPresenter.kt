@@ -19,8 +19,8 @@ import app.cash.redwood.treehouse.StandardAppLifecycle
 import app.cash.redwood.treehouse.ZiplineTreehouseUi
 import app.cash.redwood.treehouse.asZiplineTreehouseUi
 import io.composelive.designsystem.motion.protocol.guest.MotionProtocolWidgetSystemFactory
-import io.composelive.presenter.MainTreehouseUi
 import io.composelive.presenter.presentation.Navigator
+import io.composelive.wb.MainTreehouseUi
 import kotlinx.serialization.json.Json
 
 class RealMainPresenter(

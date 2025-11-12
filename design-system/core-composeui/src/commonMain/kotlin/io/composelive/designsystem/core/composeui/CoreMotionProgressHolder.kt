@@ -70,6 +70,10 @@ public class MotionProgressState(
 
     internal fun offsetChanged(offset: Int) {
         val divided = offset.toFloat() / divideScrollBy
-        progress = if (divided <= 1f) divided else 1f
+        progress = when {
+            divided <= 0f -> 0f
+            divided <= 1f -> divided
+            else -> 1f
+        }
     }
 }

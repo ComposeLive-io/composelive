@@ -34,15 +34,12 @@ public fun HorizontalPager(
     contentPadding: PaddingValues = PaddingValues(),
     pageContent: @Composable (index: Int) -> Unit,
 ) {
-    val itemsCount by derivedStateOf { state.pageCount }
     Pager(
-        modifier = modifier,
         isVertical = false,
+        state = state,
+        modifier = modifier,
         contentPadding = contentPadding,
-        pageChanged = { index -> state.currentPage = index },
-        scrollInProgressChanged = { inProgress -> state.scrollInProgress = inProgress },
-        programmaticScrollIndex = state.programmaticScrollIndex,
-        items = { (0 until itemsCount).map { pageContent(it) } },
+        pageContent = pageContent,
     )
 }
 
@@ -53,15 +50,37 @@ public fun VerticalPager(
     contentPadding: PaddingValues = PaddingValues(),
     pageContent: @Composable (index: Int) -> Unit,
 ) {
-    val itemsCount = state.pageCount
+    Pager(
+        isVertical = true,
+        state = state,
+        modifier = modifier,
+        contentPadding = contentPadding,
+        pageContent = pageContent,
+    )
+}
+
+@Composable
+private inline fun Pager(
+    isVertical: Boolean,
+    state: PagerState,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+    crossinline pageContent: @Composable (index: Int) -> Unit,
+) {
+    val pageCount by derivedStateOf { state.pageCount }
     Pager(
         modifier = modifier,
-        isVertical = true,
+        isVertical = isVertical,
         contentPadding = contentPadding,
         pageChanged = { index -> state.currentPage = index },
         scrollInProgressChanged = { inProgress -> state.scrollInProgress = inProgress },
         programmaticScrollIndex = state.programmaticScrollIndex,
-        items = { (0 until itemsCount).map { pageContent(it) } },
+        pageCount = pageCount,
+        items = {
+            for (index in 0 until pageCount) {
+                pageContent(index)
+            }
+        },
     )
 }
 
@@ -100,5 +119,5 @@ public class PagerState(pageCount: () -> Int) {
 
 @Composable
 public fun rememberPagerState(pageCount: () -> Int): PagerState {
-    return remember(pageCount) { PagerState(pageCount) }
+    return remember(pageCount()) { PagerState(pageCount) }
 }

@@ -8,45 +8,45 @@ import kotlin.jvm.JvmInline
 public value class Alignment(public val ordinal: Int) {
 
     override fun toString(): String = when (ordinal) {
-        0 -> "TopStart"
-        1 -> "TopCenter"
-        2 -> "TopEnd"
-        3 -> "CenterStart"
-        4 -> "Center"
-        5 -> "CenterEnd"
-        6 -> "BottomStart"
-        7 -> "BottomCenter"
-        8 -> "BottomEnd"
+        Ids.TOP_START -> "TopStart"
+        Ids.TOP_CENTER -> "TopCenter"
+        Ids.TOP_END -> "TopEnd"
+        Ids.CENTER_START -> "CenterStart"
+        Ids.CENTER -> "Center"
+        Ids.CENTER_END -> "CenterEnd"
+        Ids.BOTTOM_START -> "BottomStart"
+        Ids.BOTTOM_CENTER -> "BottomCenter"
+        Ids.BOTTOM_END -> "BottomEnd"
         else -> throw AssertionError()
     }
 
     public companion object {
-        public val TopStart: Alignment = Alignment(0)
-        public val TopCenter: Alignment = Alignment(1)
-        public val TopEnd: Alignment = Alignment(2)
-        public val CenterStart: Alignment = Alignment(3)
-        public val Center: Alignment = Alignment(4)
-        public val CenterEnd: Alignment = Alignment(5)
-        public val BottomStart: Alignment = Alignment(6)
-        public val BottomCenter: Alignment = Alignment(7)
-        public val BottomEnd: Alignment = Alignment(8)
+        public val TopStart: Alignment = Alignment(Ids.TOP_START)
+        public val TopCenter: Alignment = Alignment(Ids.TOP_CENTER)
+        public val TopEnd: Alignment = Alignment(Ids.TOP_END)
+        public val CenterStart: Alignment = Alignment(Ids.CENTER_START)
+        public val Center: Alignment = Alignment(Ids.CENTER)
+        public val CenterEnd: Alignment = Alignment(Ids.CENTER_END)
+        public val BottomStart: Alignment = Alignment(Ids.BOTTOM_START)
+        public val BottomCenter: Alignment = Alignment(Ids.BOTTOM_CENTER)
+        public val BottomEnd: Alignment = Alignment(Ids.BOTTOM_END)
 
-        public val Top: Vertical = Vertical(0)
-        public val CenterVertically: Vertical = Vertical(1)
-        public val Bottom: Vertical = Vertical(2)
+        public val Top: Vertical = Vertical(Ids.TOP)
+        public val CenterVertically: Vertical = Vertical(Ids.CENTER_VERTICALLY)
+        public val Bottom: Vertical = Vertical(Ids.BOTTOM)
 
-        public val Start: Horizontal = Horizontal(0)
-        public val CenterHorizontally: Horizontal = Horizontal(1)
-        public val End: Horizontal = Horizontal(2)
+        public val Start: Horizontal = Horizontal(Ids.START)
+        public val CenterHorizontally: Horizontal = Horizontal(Ids.CENTER_HORIZONTALLY)
+        public val End: Horizontal = Horizontal(Ids.END)
     }
 
     @[Immutable JvmInline Serializable]
     public value class Vertical(public val ordinal: Int) {
 
         override fun toString(): String = when (ordinal) {
-            0 -> "Top"
-            1 -> "CenterVertically"
-            2 -> "Bottom"
+            Ids.TOP -> "Top"
+            Ids.CENTER_VERTICALLY -> "CenterVertically"
+            Ids.BOTTOM -> "Bottom"
             else -> throw AssertionError()
         }
     }
@@ -55,10 +55,30 @@ public value class Alignment(public val ordinal: Int) {
     public value class Horizontal(public val ordinal: Int) {
 
         override fun toString(): String = when (ordinal) {
-            0 -> "Start"
-            1 -> "CenterHorizontally"
-            2 -> "End"
+            Ids.START -> "Start"
+            Ids.CENTER_HORIZONTALLY -> "CenterHorizontally"
+            Ids.END -> "End"
             else -> throw AssertionError()
         }
+    }
+
+    public object Ids {
+        public const val TOP_START: Int = 0
+        public const val TOP_CENTER: Int = 1
+        public const val TOP_END: Int = 2
+        public const val CENTER_START: Int = 3
+        public const val CENTER: Int = 4
+        public const val CENTER_END: Int = 5
+        public const val BOTTOM_START: Int = 6
+        public const val BOTTOM_CENTER: Int = 7
+        public const val BOTTOM_END: Int = 8
+
+        public const val TOP: Int = 0
+        public const val CENTER_VERTICALLY: Int = 1
+        public const val BOTTOM: Int = 2
+
+        public const val START: Int = 0
+        public const val CENTER_HORIZONTALLY: Int = 1
+        public const val END: Int = 2
     }
 }

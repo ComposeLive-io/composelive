@@ -9,7 +9,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiSpacer(
+public class ComposeUiSpacer(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : Spacer<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

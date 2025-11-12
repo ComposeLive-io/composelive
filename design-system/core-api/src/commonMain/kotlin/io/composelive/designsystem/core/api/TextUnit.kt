@@ -9,7 +9,9 @@ public value class TextUnit(public val value: Double) {
     public constructor(value: Float) : this(value.toDouble())
 
     public companion object {
-        public val Unspecified: TextUnit = TextUnit(-1.0)
+        public val Unspecified: TextUnit = TextUnit(TEXT_UNIT_UNSPECIFIED)
+
+        public const val TEXT_UNIT_UNSPECIFIED: Double = -1.0
     }
 }
 

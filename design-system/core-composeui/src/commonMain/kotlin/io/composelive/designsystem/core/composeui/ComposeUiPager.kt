@@ -4,6 +4,7 @@ package io.composelive.designsystem.core.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import app.cash.redwood.ui.Margin
@@ -18,7 +19,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiPager(
+public class ComposeUiPager(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : Pager<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier
@@ -33,6 +34,8 @@ internal class ComposeUiPager(
 
   private var programmaticScrollIndex: ScrollItemIndex? by mutableStateOf(null)
 
+  private var pageCount: Int by mutableIntStateOf(0)
+
   private val _items: Children = Children()
 
   override val items: Widget.Children<@Composable (UiModifier) -> Unit>
@@ -45,6 +48,7 @@ internal class ComposeUiPager(
           pageChanged as (index: Int) -> Unit,
           scrollInProgressChanged as (Boolean) -> Unit,
           programmaticScrollIndex,
+          pageCount,
           _items,
           modifier,
         )
@@ -68,5 +72,9 @@ internal class ComposeUiPager(
 
   override fun programmaticScrollIndex(programmaticScrollIndex: ScrollItemIndex?) {
     this.programmaticScrollIndex = programmaticScrollIndex
+  }
+
+  override fun pageCount(pageCount: Int) {
+    this.pageCount = pageCount
   }
 }

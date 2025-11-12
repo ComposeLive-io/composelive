@@ -15,7 +15,7 @@
  */
 package io.composelive.designsystem.core.widget.helpers
 
-internal fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int, count: Int) {
+public fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int, count: Int) {
     val dest = if (fromIndex > toIndex) toIndex else toIndex - count
     if (count == 1) {
         if (fromIndex == toIndex + 1 || fromIndex == toIndex - 1) {
@@ -35,7 +35,7 @@ internal fun <T> MutableList<T>.move(fromIndex: Int, toIndex: Int, count: Int) {
     }
 }
 
-internal fun <T> MutableList<T>.remove(index: Int, count: Int) {
+public fun <T> MutableList<T>.remove(index: Int, count: Int) {
     if (count == 1) {
         removeAt(index)
     } else {

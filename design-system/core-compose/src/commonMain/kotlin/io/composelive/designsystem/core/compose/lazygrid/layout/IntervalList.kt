@@ -17,7 +17,6 @@ package io.composelive.designsystem.core.compose.lazygrid.layout
 
 import androidx.compose.runtime.collection.MutableVector
 import androidx.compose.runtime.collection.mutableVectorOf
-import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
 
 // Copied from https://github.com/androidx/androidx/blob/67066da9297ce407186a08725dd43bc66694e115/compose/foundation/foundation/src/commonMain/kotlin/androidx/compose/foundation/lazy/layout/IntervalList.kt
 
@@ -31,7 +30,11 @@ import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
  *
  * @param T type of values each interval contains in [Interval.value].
  */
-internal sealed interface IntervalList<out T> {
+public sealed interface IntervalList<out T> {
+
+    public val intervalsCount: Int
+
+    public fun getInterval(index: Int): Interval<T>
 
     /**
      * The total amount of items in all the intervals.
@@ -39,14 +42,14 @@ internal sealed interface IntervalList<out T> {
      * Note that it is not the amount of intervals, but the sum of [Interval.size] for all the
      * intervals added into this list.
      */
-    val size: Int
+    public val size: Int
 
     /**
      * Returns the interval containing the given [index].
      *
      * @throws IndexOutOfBoundsException if the index is not within 0..[size] - 1 range.
      */
-    operator fun get(index: Int): Interval<T>
+    public operator fun get(index: Int): Interval<T>
 
     /**
      * Iterates through all the intervals starting from the one containing [fromIndex]
@@ -58,7 +61,7 @@ internal sealed interface IntervalList<out T> {
      *
      * @throws IndexOutOfBoundsException if the indexes are not within 0..[size] - 1 range.
      */
-    fun forEach(
+    public fun forEach(
         fromIndex: Int = 0,
         toIndex: Int = size - 1,
         block: (Interval<T>) -> Unit,
@@ -69,12 +72,12 @@ internal sealed interface IntervalList<out T> {
      *
      * @see get
      */
-    class Interval<out T> internal constructor(
+    @ConsistentCopyVisibility
+    public data class Interval<out T> internal constructor(
         /**
          * The index of the first item in the interval.
          */
         val startIndex: Int,
-        val index: Int,
         /**
          * The amount of items in the interval.
          */
@@ -83,7 +86,6 @@ internal sealed interface IntervalList<out T> {
          * The value representing this interval.
          */
         val value: T,
-        val span: ((index: Int) -> GridItemSpan)?,
     ) {
         init {
             require(startIndex >= 0) { "startIndex should be >= 0, but was $startIndex" }
@@ -97,6 +99,12 @@ internal sealed interface IntervalList<out T> {
  */
 internal class MutableIntervalList<T> : IntervalList<T> {
     private val intervals = mutableVectorOf<IntervalList.Interval<T>>()
+
+    override val intervalsCount: Int
+        get() = intervals.size
+
+    override fun getInterval(index: Int): IntervalList.Interval<T> =
+        intervals[index]
 
     override var size = 0
         private set
@@ -113,7 +121,7 @@ internal class MutableIntervalList<T> : IntervalList<T> {
      * @param size the amount of items in the new interval.
      * @param value the value representing this interval.
      */
-    fun addInterval(size: Int, index: Int, value: T, span: ((Int) -> GridItemSpan)?) {
+    fun addInterval(size: Int, value: T) {
         require(size >= 0) {
             "size should be >=0, but was $size"
         }
@@ -123,10 +131,8 @@ internal class MutableIntervalList<T> : IntervalList<T> {
 
         val interval = IntervalList.Interval(
             startIndex = this.size,
-            index = index,
             size = size,
             value = value,
-            span = span,
         )
         this.size += size
         intervals.add(interval)

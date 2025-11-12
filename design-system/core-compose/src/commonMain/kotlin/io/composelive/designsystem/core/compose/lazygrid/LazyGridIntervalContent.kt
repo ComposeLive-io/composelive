@@ -17,6 +17,7 @@ package io.composelive.designsystem.core.compose.lazygrid
 
 import androidx.compose.runtime.Composable
 import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
+import io.composelive.designsystem.core.compose.LazyGridScope
 import io.composelive.designsystem.core.compose.lazygrid.layout.LazyLayoutIntervalContent
 import io.composelive.designsystem.core.compose.lazygrid.layout.MutableIntervalList
 
@@ -25,8 +26,8 @@ import io.composelive.designsystem.core.compose.lazygrid.layout.MutableIntervalL
 
 internal class LazyGridIntervalContent(
     content: LazyGridScope.() -> Unit,
-) : LazyLayoutIntervalContent<LazyGridInterval>(), LazyGridScope {
-    override val intervals: MutableIntervalList<LazyGridInterval> = MutableIntervalList()
+) : LazyLayoutIntervalContent<LazyListInterval>(), LazyGridScope {
+    override val intervals: MutableIntervalList<LazyListInterval> = MutableIntervalList()
 
     init {
         apply(content)
@@ -34,31 +35,34 @@ internal class LazyGridIntervalContent(
 
     override fun items(
         count: Int,
-        span: ((Int) -> GridItemSpan)?,
-        itemContent: @Composable (index: Int) -> Unit,
+        placeholder: @Composable (() -> Unit),
+        itemContent: @Composable ((Int) -> Unit)
     ) {
         intervals.addInterval(
             count,
-            index = intervals.size,
-            LazyGridInterval(
+            LazyListInterval(
+                placeholder = placeholder,
                 item = itemContent,
             ),
-            span = span,
         )
     }
 
-    override fun item(span: ((Int) -> GridItemSpan)?, content: @Composable () -> Unit) {
+    override fun item(span: () -> GridItemSpan?, content: @Composable (() -> Unit)) {
         intervals.addInterval(
             1,
-            index = intervals.size,
-            LazyGridInterval(
-                item = { _ -> content() },
+            LazyListInterval(
+                placeholder = {},
+                span = span(),
+                item = {
+                    content()
+                },
             ),
-            span = span,
         )
     }
 }
 
-internal class LazyGridInterval(
-    val item: @Composable (index: Int) -> Unit,
+public class LazyListInterval(
+    public val placeholder: @Composable () -> Unit,
+    public val span: GridItemSpan? = null,
+    public val item: @Composable (index: Int) -> Unit,
 ) : LazyLayoutIntervalContent.Interval

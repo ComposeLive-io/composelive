@@ -10,7 +10,7 @@ import io.composelive.designsystem.core.api.TextUnit
 
 @Composable
 public fun TextField(
-    state: TextFieldValue = TextFieldValue(),
+    fieldState: TextFieldValue = TextFieldValue(),
     hint: String = "",
     color: Color = Color.Unspecified,
     hintColor: Color = Color.Unspecified,
@@ -28,7 +28,7 @@ public fun TextField(
     modifier: Modifier = Modifier,
 ) {
     TextField(
-        state = state,
+        state = fieldState,
         hint = hint,
         style = style,
         hintStyle = hintStyle,

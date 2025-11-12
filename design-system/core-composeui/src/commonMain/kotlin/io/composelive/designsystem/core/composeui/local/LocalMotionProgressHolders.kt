@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.composelive.designsystem.core.composeui.MotionProgressState
@@ -22,8 +24,10 @@ internal inline fun WithLocalMotionProgressHolders(
     children: Children,
     crossinline content: @Composable () -> Unit,
 ) {
-    val holders = remember(children) {
-        children.widgets.filterIsInstance<RedwoodLayoutMotionProgressHolder>()
+    val holders by remember {
+        derivedStateOf {
+            children.widgets.filterIsInstance<RedwoodLayoutMotionProgressHolder>()
+        }
     }
     holders.forEach { holder ->
         holder.value(Modifier)
@@ -43,7 +47,9 @@ internal inline fun WithLocalMotionProgressHolders(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-public fun findMotionProgressState(id: Long): MotionProgressState? =
-    LocalMotionProgressHolders.current
-        .find { it.progress?.id == id }
-        ?.state
+public fun rememberMotionProgressState(id: Long): MotionProgressState? {
+    val holders = LocalMotionProgressHolders.current
+    return remember(id) {
+        holders.find { it.progress?.id == id }?.state
+    }
+}

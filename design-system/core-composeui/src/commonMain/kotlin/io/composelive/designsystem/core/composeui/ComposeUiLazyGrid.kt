@@ -10,7 +10,6 @@ import androidx.compose.runtime.setValue
 import app.cash.redwood.widget.Widget
 import io.composelive.designsystem.core.api.Arrangement
 import io.composelive.designsystem.core.api.MotionProgress
-import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
 import io.composelive.designsystem.core.api.lazygrid.ScrollItemIndex
 import io.composelive.designsystem.core.composeui.children.Children
 import io.composelive.designsystem.core.widget.LazyGrid
@@ -18,29 +17,31 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.Suppress
 import kotlin.Unit
-import kotlin.collections.List
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiLazyGrid(
+public class ComposeUiLazyGrid(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : LazyGrid<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier
 
   private var isVertical: Boolean? by mutableStateOf(null)
 
-  private var onViewportChanged: ((firstVisibleItemIndex: Int, lastVisibleItemIndex: Int) -> Unit)?
-      by mutableStateOf(null)
+  private var onViewportChanged: ((
+    firstVisibleItemIndex: Int,
+    lastVisibleItemIndex: Int,
+    viewportChangeId: Int,
+  ) -> Unit)? by mutableStateOf(null)
 
-  private var programmaticScrollIndex: ScrollItemIndex? by mutableStateOf(null)
+  private var lastReceivedViewportChangedId: Int by mutableIntStateOf(0)
+
+  private var scrollItemIndex: ScrollItemIndex? by mutableStateOf(null)
 
   private var chunks: Int by mutableIntStateOf(0)
 
   private var horizontalArrangement: Arrangement? by mutableStateOf(null)
 
   private var verticalArrangement: Arrangement? by mutableStateOf(null)
-
-  private var spans: List<GridItemSpan>? by mutableStateOf(null)
 
   private var boundMotionProgress: MotionProgress? by mutableStateOf(null)
 
@@ -52,12 +53,16 @@ internal class ComposeUiLazyGrid(
   override val `value`: @Composable (UiModifier) -> Unit = { modifier ->
         this.factory.LazyGridBinding(
           isVertical as Boolean,
-          onViewportChanged as (firstVisibleItemIndex: Int, lastVisibleItemIndex: Int) -> Unit,
-          programmaticScrollIndex,
+          onViewportChanged as (
+            firstVisibleItemIndex: Int,
+            lastVisibleItemIndex: Int,
+            viewportChangeId: Int,
+          ) -> Unit,
+          lastReceivedViewportChangedId,
+          scrollItemIndex,
           chunks,
           horizontalArrangement,
           verticalArrangement,
-          spans as List<GridItemSpan>,
           boundMotionProgress,
           _items,
           modifier,
@@ -68,12 +73,20 @@ internal class ComposeUiLazyGrid(
     this.isVertical = isVertical
   }
 
-  override fun onViewportChanged(onViewportChanged: (firstVisibleItemIndex: Int, lastVisibleItemIndex: Int) -> Unit) {
+  override fun onViewportChanged(onViewportChanged: (
+    firstVisibleItemIndex: Int,
+    lastVisibleItemIndex: Int,
+    viewportChangeId: Int,
+  ) -> Unit) {
     this.onViewportChanged = onViewportChanged
   }
 
-  override fun programmaticScrollIndex(programmaticScrollIndex: ScrollItemIndex?) {
-    this.programmaticScrollIndex = programmaticScrollIndex
+  override fun lastReceivedViewportChangedId(lastReceivedViewportChangedId: Int) {
+    this.lastReceivedViewportChangedId = lastReceivedViewportChangedId
+  }
+
+  override fun scrollItemIndex(scrollItemIndex: ScrollItemIndex?) {
+    this.scrollItemIndex = scrollItemIndex
   }
 
   override fun chunks(chunks: Int) {
@@ -86,10 +99,6 @@ internal class ComposeUiLazyGrid(
 
   override fun verticalArrangement(verticalArrangement: Arrangement?) {
     this.verticalArrangement = verticalArrangement
-  }
-
-  override fun spans(spans: List<GridItemSpan>) {
-    this.spans = spans
   }
 
   override fun boundMotionProgress(boundMotionProgress: MotionProgress?) {

@@ -17,7 +17,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiAnimatedVisibility(
+public class ComposeUiAnimatedVisibility(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : AnimatedVisibility<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

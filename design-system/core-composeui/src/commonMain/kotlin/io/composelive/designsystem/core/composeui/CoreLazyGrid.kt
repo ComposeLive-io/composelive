@@ -21,146 +21,200 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import app.cash.redwood.widget.Widget
 import io.composelive.designsystem.core.api.MotionProgress
 import io.composelive.designsystem.core.api.lazygrid.ScrollItemIndex
+import io.composelive.designsystem.core.composeui.children.Children
 import io.composelive.designsystem.core.composeui.lazygrid.rememberCurrentOffset
-import io.composelive.designsystem.core.composeui.local.findMotionProgressState
-import io.composelive.designsystem.core.modifier.StickyHeader
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
+import io.composelive.designsystem.core.composeui.local.rememberMotionProgressState
+import io.composelive.designsystem.core.widget.LazyGrid
+import app.cash.redwood.Modifier as RedwoodModifier
 import io.composelive.designsystem.core.api.Arrangement as RedwoodArrangement
-import io.composelive.designsystem.core.api.lazygrid.GridItemSpan as RedwoodGridItemSpan
 
-@Composable
-public fun CoreLazyGrid(
-    isVertical: Boolean,
-    onViewportChanged: (Int, Int) -> Unit,
-    programmaticScrollIndex: ScrollItemIndex?,
-    chunks: Int,
-    horizontalArrangement: RedwoodArrangement?,
-    verticalArrangement: RedwoodArrangement?,
-    boundMotionProgress: MotionProgress?,
-    modifier: Modifier,
-    content: LazyGridScope.() -> Unit,
-) {
-    val state = rememberLazyGridState()
-    val lastVisibleItemIndex by remember {
-        derivedStateOf { state.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+internal class CoreLazyGrid : LazyGrid<@Composable (Modifier) -> Unit> {
+    private var isVertical by mutableStateOf(false)
+
+    private var nextViewportChangeId = 0
+    private var isSendingViewportChange = false
+    private var delayedViewportChange = DelayedViewportChange()
+
+    private var cells: GridCells by mutableStateOf(GridCells.Fixed(1))
+    private var horizontalArrangement: RedwoodArrangement? by mutableStateOf(null)
+    private var verticalArrangement: RedwoodArrangement? by mutableStateOf(null)
+    private var boundMotionProgress: MotionProgress? by mutableStateOf(null)
+
+    private var onViewportChanged:
+            ((firstVisibleItemIndex: Int, lastVisibleItemIndex: Int, id: Int) -> Unit)?
+            by mutableStateOf(null)
+
+    private var scrollItemIndex by mutableStateOf<ScrollItemIndex?>(null)
+
+    override var modifier: RedwoodModifier = RedwoodModifier
+
+    override val items = Children()
+
+    override fun isVertical(isVertical: Boolean) {
+        this.isVertical = isVertical
     }
-    LaunchedEffect(lastVisibleItemIndex) {
-        lastVisibleItemIndex?.let { lastVisibleItemIndex ->
-            onViewportChanged(state.firstVisibleItemIndex, lastVisibleItemIndex)
-        }
+
+    override fun onViewportChanged(onViewportChanged: (firstVisibleItemIndex: Int, lastVisibleItemIndex: Int, id: Int) -> Unit) {
+        this.onViewportChanged = onViewportChanged
     }
-    LaunchedEffect(programmaticScrollIndex) {
-        programmaticScrollIndex?.let { index ->
-            if (index.animated) {
-                state.animateScrollToItem(index = index.index)
+
+    override fun lastReceivedViewportChangedId(lastReceivedViewportChangedId: Int) {
+        if (lastReceivedViewportChangedId != -1) {
+            if (delayedViewportChange.isSet()) {
+                isSendingViewportChange = true
+                val viewportChangeId = nextViewportChangeId.also { nextViewportChangeId++ }
+                onViewportChanged!!(
+                    delayedViewportChange.firstVisibleItemIndex,
+                    delayedViewportChange.lastVisibleItemIndex,
+                    viewportChangeId
+                )
+                delayedViewportChange.clear()
             } else {
-                state.scrollToItem(index = index.index)
+                isSendingViewportChange = false
             }
         }
     }
-    val boundMotionProgress = boundMotionProgress
-    if (boundMotionProgress != null) {
-        val offset by rememberCurrentOffset(state)
-        val motionProgressState = findMotionProgressState(boundMotionProgress.id)
-        motionProgressState?.offsetChanged(offset)
-    }
-    if (isVertical) {
-        LazyVerticalGrid(
-            modifier = modifier,
-            state = state,
-            columns = GridCells.Fixed(chunks),
-            horizontalArrangement = horizontalArrangement
-                ?.toHorizontalArrangement()
-                ?: Arrangement.Start,
-            verticalArrangement = verticalArrangement
-                ?.toVerticalArrangement()
-                ?: Arrangement.Top,
-            content = content,
-        )
-    } else {
-        LazyHorizontalGrid(
-            modifier = modifier,
-            state = state,
-            horizontalArrangement = horizontalArrangement
-                ?.toHorizontalArrangement()
-                ?: Arrangement.Start,
-            verticalArrangement = verticalArrangement
-                ?.toVerticalArrangement()
-                ?: Arrangement.Top,
-            rows = GridCells.Fixed(chunks),
-            content = content,
-        )
-    }
-}
 
-public inline fun lazyGridItems(
-    itemCount: Int,
-    spans: List<RedwoodGridItemSpan>,
-    crossinline isStickyHeader: (index: Int) -> Boolean,
-    crossinline item: @Composable (index: Int) -> Unit,
-): LazyGridScope.() -> Unit = {
-    val itemChunkIndexes = mutableListOf<Int>()
-    var itemsOffset = 0
-    repeat(itemCount) { index ->
-        if (isStickyHeader(index)) {
-            addItems(
-                indexOffset = itemsOffset,
-                spans = spans,
-                itemIndexes = itemChunkIndexes.toImmutableList(),
-                item = item,
+    override fun scrollItemIndex(scrollItemIndex: ScrollItemIndex?) {
+        this.scrollItemIndex = scrollItemIndex
+    }
+
+    override fun chunks(chunks: Int) {
+        cells = GridCells.Fixed(chunks)
+    }
+
+    override fun horizontalArrangement(horizontalArrangement: RedwoodArrangement?) {
+        this.horizontalArrangement = horizontalArrangement
+    }
+
+    override fun verticalArrangement(verticalArrangement: RedwoodArrangement?) {
+        this.verticalArrangement = verticalArrangement
+    }
+
+    override fun boundMotionProgress(boundMotionProgress: MotionProgress?) {
+        this.boundMotionProgress = boundMotionProgress
+    }
+
+    override val value: @Composable (Modifier) -> Unit = { modifier ->
+        val lazyItems by remember {
+            derivedStateOf { items.widgets.filterIsInstance<CoreLazyItems>() }
+        }
+        val content: LazyGridScope.() -> Unit = {
+            lazyItems.forEach { items ->
+                val span = items.span
+                if (span != null) {
+                    items(
+                        count = items.items.totalItemsCount,
+                        span = {
+                            GridItemSpan(span.value)
+                        }
+                    ) { itemIndex ->
+                        items.items.Render(virtualIndex = itemIndex)
+                    }
+                } else {
+                    items(
+                        count = items.items.totalItemsCount,
+                    ) { itemIndex ->
+                        items.items.Render(virtualIndex = itemIndex)
+                    }
+                }
+            }
+        }
+
+        val state = rememberLazyGridState()
+        val lastVisibleItemIndex by remember {
+            derivedStateOf { state.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+        }
+        LaunchedEffect(lastVisibleItemIndex) {
+            lastVisibleItemIndex?.let { lastVisibleItemIndex ->
+                if (!isSendingViewportChange) {
+                    isSendingViewportChange = true
+                    val viewportChangeId = nextViewportChangeId.also { nextViewportChangeId++ }
+                    onViewportChanged!!(
+                        state.firstVisibleItemIndex,
+                        lastVisibleItemIndex,
+                        viewportChangeId
+                    )
+                } else {
+                    delayedViewportChange.firstVisibleItemIndex = state.firstVisibleItemIndex
+                    delayedViewportChange.lastVisibleItemIndex = lastVisibleItemIndex
+                }
+            }
+        }
+        LaunchedEffect(scrollItemIndex) {
+            scrollItemIndex?.let { itemIndex ->
+                if (itemIndex.animated) {
+                    state.animateScrollToItem(index = itemIndex.index)
+                } else {
+                    state.scrollToItem(index = itemIndex.index)
+                }
+            }
+        }
+        val boundMotionProgress = boundMotionProgress
+        if (boundMotionProgress != null) {
+            val offset by rememberCurrentOffset(state)
+            val motionProgressState = rememberMotionProgressState(boundMotionProgress.id)
+            LaunchedEffect(offset, motionProgressState) {
+                motionProgressState?.offsetChanged(offset)
+            }
+        }
+        if (isVertical) {
+            LazyVerticalGrid(
+                modifier = modifier,
+                state = state,
+                columns = cells,
+                horizontalArrangement = remember(horizontalArrangement) {
+                    horizontalArrangement
+                        ?.toHorizontalArrangement()
+                        ?: Arrangement.Start
+                },
+                verticalArrangement = remember(verticalArrangement) {
+                    verticalArrangement
+                        ?.toVerticalArrangement()
+                        ?: Arrangement.Top
+                },
+                content = content,
             )
-            itemsOffset += itemChunkIndexes.size
-            itemChunkIndexes.clear()
-            stickyHeader {
-                item(index)
-            }
-            itemsOffset++
         } else {
-            itemChunkIndexes.add(index)
+            LazyHorizontalGrid(
+                modifier = modifier,
+                rows = cells,
+                horizontalArrangement = remember(horizontalArrangement) {
+                    horizontalArrangement
+                        ?.toHorizontalArrangement()
+                        ?: Arrangement.Start
+                },
+                verticalArrangement = remember(verticalArrangement) {
+                    verticalArrangement
+                        ?.toVerticalArrangement()
+                        ?: Arrangement.Top
+                },
+                state = state,
+                content = content,
+            )
         }
     }
-    addItems(
-        indexOffset = itemsOffset,
-        spans = spans,
-        itemIndexes = itemChunkIndexes.toImmutableList(),
-        item = item,
-    )
-}
 
-@PublishedApi
-internal inline fun LazyGridScope.addItems(
-    indexOffset: Int,
-    spans: List<RedwoodGridItemSpan>,
-    itemIndexes: ImmutableList<Int>,
-    crossinline item: @Composable (index: Int) -> Unit,
-) {
-    itemsIndexed(
-        itemIndexes,
-        span = { index, _ ->
-            val span = spans.getOrNull(indexOffset + index) ?: RedwoodGridItemSpan.SINGLE
-            GridItemSpan(span.value)
+    private class DelayedViewportChange {
+        var firstVisibleItemIndex: Int = -1
+        var lastVisibleItemIndex: Int = -1
+
+        fun isSet() = firstVisibleItemIndex != -1 && lastVisibleItemIndex != -1
+
+        fun clear() {
+            firstVisibleItemIndex = -1
+            lastVisibleItemIndex = -1
         }
-    ) { _, itemIndex ->
-        item(itemIndex)
     }
-}
-
-internal fun isStickyHeader(widget: Widget<@Composable (Modifier) -> Unit>): Boolean {
-    var found = false
-    widget.modifier.forEachScoped { element ->
-        if (element is StickyHeader) found = true
-    }
-    return found
 }

@@ -27,6 +27,7 @@ kotlin {
                 implementation(compose.material3)
 
                 implementation(libs.kotlinxCollectionsImmutable)
+                implementation(libs.androidxCollection)
 
                 implementation(libs.composeShimmer)
             }

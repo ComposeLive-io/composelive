@@ -22,85 +22,103 @@ import io.composelive.designsystem.core.api.Color
 import io.composelive.designsystem.core.api.PaddingValues
 import io.composelive.designsystem.core.api.Shape
 
+/**
+ * Add additional space around the item.
+ */
 @Modifier(1)
-public data class Padding(
+data class Padding(
     val values: PaddingValues,
 )
 
+/**
+ * Set the alignment for an item along the horizontal axis.
+ */
 @Modifier(2, ColumnScope::class)
-public data class AlignHorizontally(
+data class AlignHorizontally(
     val alignment: Alignment.Horizontal,
 )
 
+/**
+ * Set the alignment for an item along the vertical axis.
+ */
 @Modifier(3, RowScope::class)
-public data class AlignVertically(
+data class AlignVertically(
     val alignment: Alignment.Vertical,
 )
 
 @Modifier(4, BoxScope::class)
-public data class Align(
+data class Align(
     val alignment: Alignment,
 )
 
+/**
+ * Set a required width for an item.
+ */
 @Modifier(5)
-public data class Width(
+data class Width(
     val width: Dp,
 )
 
+/**
+ * Set a required height for an item.
+ */
 @Modifier(6)
-public data class Height(
+data class Height(
     val height: Dp,
 )
 
 @Modifier(7, RowScope::class, ColumnScope::class)
-public data class Weight(
+data class Weight(
     val value: Double,
 )
 
 @Modifier(8)
-public data object FillMaxWidth
+data object FillMaxWidth
 
 @Modifier(9)
-public data object FillMaxHeight
+data object FillMaxHeight
 
 @Modifier(10)
-public data class AspectRatio(
+data class AspectRatio(
     val ratio: Double,
 )
 
 @Modifier(11)
-public data class Background(
+data class Background(
     val color: Color = Color.Unspecified,
-    val shape: Shape = Shape.Rectangle,
+    val shape: Shape = Shape(rectangle = Shape.Rectangle),
 )
 
 @Modifier(12)
-public data class Clip(
+data class Clip(
     val shape: Shape,
 )
 
 @Modifier(13, LazyGridItemScope::class)
-public data object StickyHeader
+data object StickyHeader
 
 @Modifier(14)
-public data object Shimmer
+data object Shimmer
 
 @Modifier(15)
-public data class Alpha(val value: Double)
+data class Alpha(val value: Double)
 
 @Modifier(16)
-public data class DefaultMinSize(
+data class DefaultMinSize(
     val minWidth: Dp = Dp(Int.MAX_VALUE.toDouble()), // Dp.Unspecified
     val minHeight: Dp = Dp(Int.MAX_VALUE.toDouble()), // Dp.Unspecified
 )
 
 @Modifier(17)
-public data class WrapContentHeight(
+data class WrapContentHeight(
     val align: Alignment.Vertical = Alignment.CenterVertically,
     val unbounded: Boolean = false,
 )
 
 @Modifier(18)
-public data class LayoutId(
+data class LayoutId(
     val id: String,
 )
+
+@Modifier(-4_543_827) // Reserved tag
+data object Reuse

@@ -14,12 +14,20 @@ public value class ExitTransition(public val value: Int) {
         (value and transition.value) != 0
 
     public companion object {
+        public val fadeOut: ExitTransition = ExitTransition(Ids.FADE_OUT)
+        public val scaleOut: ExitTransition = ExitTransition(Ids.SCALE_OUT)
+        public val shrinkOut: ExitTransition = ExitTransition(Ids.SHRINK_OUT)
+        public val slideOutHorizontally: ExitTransition = ExitTransition(Ids.SLIDE_OUT_HORIZONTALLY)
+        public val slideOutVertically: ExitTransition = ExitTransition(Ids.SLIDE_OUT_VERTICALLY)
+    }
+
+    public object Ids {
         // @formatter:off
-        public val fadeOut: ExitTransition              = ExitTransition(0b1)
-        public val scaleOut: ExitTransition             = ExitTransition(0b10)
-        public val shrinkOut: ExitTransition            = ExitTransition(0b100)
-        public val slideOutHorizontally: ExitTransition = ExitTransition(0b1000)
-        public val slideOutVertically: ExitTransition   = ExitTransition(0b10000)
+        public const val FADE_OUT: Int               = 0b1
+        public const val SCALE_OUT: Int              = 0b10
+        public const val SHRINK_OUT: Int             = 0b100
+        public const val SLIDE_OUT_HORIZONTALLY: Int = 0b1000
+        public const val SLIDE_OUT_VERTICALLY: Int   = 0b10000
         // @formatter:on
     }
 }

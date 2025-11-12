@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import io.composelive.designsystem.core.composeui.images.LocalImageLoader
 
 @Composable
@@ -29,7 +32,14 @@ public fun CoreAsyncImage(
     AsyncImage(
         modifier = modifier,
         contentScale = ContentScale.Crop,
-        model = model,
+        model = if (model.isNotEmpty()) {
+            ImageRequest.Builder(LocalPlatformContext.current)
+                .data(model)
+                .crossfade(true)
+                .build()
+        } else {
+            null
+        },
         imageLoader = requireNotNull(LocalImageLoader.current) {
             "LocalImageLoader must be set"
         },

@@ -8,6 +8,8 @@ import kotlin.jvm.JvmInline
 public value class Color(public val value: Long) {
 
     public companion object {
-        public val Unspecified: Color = Color(Int.MAX_VALUE.toLong())
+        public val Unspecified: Color = Color(COLOR_UNSPECIFIED)
+
+        public const val COLOR_UNSPECIFIED: Long = Int.MAX_VALUE.toLong()
     }
 }

@@ -11,7 +11,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiColumn(
+public class ComposeUiColumn(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : Column<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

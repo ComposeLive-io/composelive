@@ -11,7 +11,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiRow(
+public class ComposeUiRow(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : Row<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

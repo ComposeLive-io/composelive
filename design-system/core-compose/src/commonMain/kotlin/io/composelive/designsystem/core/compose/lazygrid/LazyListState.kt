@@ -18,21 +18,22 @@ package io.composelive.designsystem.core.compose.lazygrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.composelive.designsystem.core.api.lazygrid.ScrollItemIndex
+import io.composelive.designsystem.core.compose.lazygrid.layout.IntervalList
+import io.composelive.designsystem.core.compose.lazygrid.strategy.LoadingStrategy
+import io.composelive.designsystem.core.compose.lazygrid.strategy.StaticSizeLoadingStrategy
 
 /**
  * Creates a [LazyGridState] that is remembered across compositions.
  */
 @Composable
 public fun rememberLazyGridState(
-    strategy: LoadingStrategy = ScrollOptimizedLoadingStrategy(),
+    strategy: LoadingStrategy = StaticSizeLoadingStrategy(),
 ): LazyGridState {
-    return rememberSaveable(saver = saver) {
-        LazyGridState(strategy)
-    }
+    return remember { LazyGridState(strategy) }
 }
 
 /** The default [Saver] implementation for [LazyGridState]. */
@@ -51,15 +52,13 @@ private val saver: Saver<LazyGridState, *> = Saver(
  * In most cases, this will be created via [rememberLazyGridState].
  */
 public open class LazyGridState(
-    public val strategy: LoadingStrategy = ScrollOptimizedLoadingStrategy(),
+    public val strategy: LoadingStrategy = StaticSizeLoadingStrategy(),
 ) {
     /**
      * Update this to trigger a programmatic scroll. This may be updated multiple times, including
      * when the previous scroll state is restored.
      */
-    public var programmaticScrollIndex: ScrollItemIndex by mutableStateOf(
-        ScrollItemIndex(id = 0, index = 0, animated = false),
-    )
+    public var programmaticScrollIndex: ScrollItemIndex? by mutableStateOf(null)
         private set
 
     /** Once we receive a user scroll, we limit which programmatic scrolls we apply. */
@@ -78,7 +77,7 @@ public open class LazyGridState(
 
         val previous = programmaticScrollIndex
         this.programmaticScrollIndex = ScrollItemIndex(
-            id = previous.id + 1,
+            id = (previous?.id ?: 0) + 1,
             index = firstIndex,
             animated = animated,
         )
@@ -91,10 +90,17 @@ public open class LazyGridState(
         }
 
         strategy.onUserScroll(firstIndex, lastIndex)
-        loadRange(1)
     }
 
-    public fun loadRange(itemCount: Int): IntRange {
-        return strategy.loadRange(itemCount)
+    public fun loadRanges(
+        intervals: IntervalList<LazyListInterval>,
+        writeFirstsTo: IntArray,
+        writeLastsTo: IntArray,
+    ) {
+        strategy.loadRanges(intervals, writeFirstsTo, writeLastsTo)
+    }
+
+    public fun dataUpdated() {
+        strategy.dataUpdated()
     }
 }

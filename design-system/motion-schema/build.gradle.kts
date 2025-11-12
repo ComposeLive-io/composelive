@@ -3,10 +3,6 @@ plugins {
     alias(libs.plugins.redwoodSchema)
 }
 
-kotlin {
-    explicitApi()
-}
-
 dependencies {
     api(projects.designSystem.motionApi)
     api(projects.designSystem.coreSchema)

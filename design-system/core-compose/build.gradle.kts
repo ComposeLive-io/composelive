@@ -16,10 +16,15 @@ kotlin {
         browser()
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
+
     sourceSets {
         commonMain {
             dependencies {
                 api(libs.redwoodCompose)
+                api(libs.androidxCollection)
                 api(projects.designSystem.coreModifiers)
                 api(projects.designSystem.coreWidget)
             }

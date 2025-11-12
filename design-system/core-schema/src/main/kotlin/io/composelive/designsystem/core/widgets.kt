@@ -34,64 +34,77 @@ import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
 import io.composelive.designsystem.core.api.lazygrid.ScrollItemIndex
 
 @Widget(1)
-public data class Row(
+data class Row(
     @Children(1) val content: RowScope.() -> Unit,
 )
 
-public object RowScope
+object RowScope
 
 @Widget(2)
-public data class Column(
+data class Column(
     @Children(1) val content: ColumnScope.() -> Unit,
 )
 
-public object ColumnScope
+object ColumnScope
 
 @Widget(3)
-public data object Spacer
+data object Spacer
 
 @Widget(4)
-public data class Box(
+data class Box(
     @Property(1) val onClick: (() -> Unit)? = null,
+    /**
+     * A slot to add widgets in.
+     */
     @Children(1) val content: BoxScope.() -> Unit = {},
 )
 
-public object BoxScope
+object BoxScope
 
 @Widget(5)
-public data class LazyGrid(
-    @Property(1) val isVertical: Boolean = true,
-    @Property(2) val onViewportChanged: (firstVisibleItemIndex: Int, lastVisibleItemIndex: Int) -> Unit,
-    @Property(3) val programmaticScrollIndex: ScrollItemIndex? = null,
-    @Property(4) val chunks: Int = 1,
-    @Property(5) val horizontalArrangement: Arrangement? = null,
-    @Property(6) val verticalArrangement: Arrangement? = null,
-    @Property(7) val spans: List<GridItemSpan> = emptyList(),
+data class LazyGrid(
+    @Property(1) val isVertical: Boolean,
+    @Property(2) val onViewportChanged: (firstVisibleItemIndex: Int, lastVisibleItemIndex: Int, viewportChangeId: Int) -> Unit,
+    @Property(3) val lastReceivedViewportChangedId: Int = -1,
+    @Property(4) val scrollItemIndex: ScrollItemIndex?,
+    @Property(5) val chunks: Int = 1,
+    @Property(6) val horizontalArrangement: Arrangement? = null,
+    @Property(7) val verticalArrangement: Arrangement? = null,
     @Property(8) val boundMotionProgress: MotionProgress? = null,
-    @Children(1) val items: LazyGridItemScope.() -> Unit,
+    @Children(1) val items: () -> Unit,
 )
 
-public object LazyGridItemScope
+object LazyGridItemScope
 
 @Widget(6)
-public data class Pager(
+data class LazyItems(
+    @Property(1) val itemsBefore: Int,
+    @Property(2) val itemsAfter: Int,
+    @Property(3) val span: GridItemSpan? = null,
+    @Children(1) val placeholder: () -> Unit,
+    @Children(2) val items: () -> Unit,
+)
+
+@Widget(7)
+data class Pager(
     @Property(1) val isVertical: Boolean = false,
     @Property(2) val contentPadding: PaddingValues = Margin(),
     @Property(3) val pageChanged: (index: Int) -> Unit,
     @Property(4) val scrollInProgressChanged: (Boolean) -> Unit,
     @Property(5) val programmaticScrollIndex: ScrollItemIndex? = null,
+    @Property(6) val pageCount: Int = 0,
     @Children(1) val items: () -> Unit,
 )
 
-@Widget(7)
-public data class PullToRefreshBox(
+@Widget(8)
+data class PullToRefreshBox(
     @Property(1) val isRefreshing: Boolean = false,
     @Property(2) val onRefresh: () -> Unit,
     @Children(1) val content: BoxScope.() -> Unit,
 )
 
-@Widget(8)
-public data class Scaffold(
+@Widget(9)
+data class Scaffold(
     @Property(1) val paddingValuesChanged: (PaddingValues) -> Unit,
     @Children(1) val topBar: @Composable () -> Unit = {},
     @Children(2) val bottomBar: @Composable () -> Unit = {},
@@ -99,46 +112,41 @@ public data class Scaffold(
     @Children(4) val content: @Composable () -> Unit,
 )
 
-@Widget(9)
-public data class AnimatedVisibility(
+@Widget(10)
+data class AnimatedVisibility(
     @Property(1) val visible: Boolean = true,
     @Property(2) val enter: EnterTransition = EnterTransition.fadeIn + EnterTransition.expandIn,
     @Property(3) val exit: ExitTransition = ExitTransition.shrinkOut + ExitTransition.fadeOut,
     @Children(1) val content: @Composable () -> Unit,
 )
 
-@Widget(10)
-public data class Root(
+@Widget(11)
+data class Root(
     @Children(1) val content: @Composable () -> Unit,
 )
 
-@Widget(11)
-public data class TextField(
-    @Property(1)
-    val state: TextFieldValue = TextFieldValue(),
-    @Property(2)
-    val hint: String = "",
-    @Property(3)
-    val style: TextStyle = TextStyle(),
-    @Property(6)
-    val hintStyle: TextStyle? = null,
-    @Property(7)
-    val onChange: ((TextFieldValue) -> Unit)? = null,
+@Widget(12)
+data class TextField(
+    @Property(1) val state: TextFieldValue = TextFieldValue(),
+    @Property(2) val hint: String = "",
+    @Property(3) val style: TextStyle = TextStyle(),
+    @Property(6) val hintStyle: TextStyle? = null,
+    @Property(7) val onChange: ((TextFieldValue) -> Unit)? = null,
 )
 
-@Widget(12)
-public data class Text(
+@Widget(13)
+data class Text(
     @Property(1) val text: String = "Text",
     @Property(2) val style: TextStyle = TextStyle(),
 )
 
-@Widget(13)
-public data class AsyncImage(
+@Widget(14)
+data class AsyncImage(
     @Property(1) val model: String = "",
 )
 
-@Widget(14)
-public data class Button(
+@Widget(15)
+data class Button(
     @Property(1) val enabled: Boolean = true,
     @Property(2) val shape: Shape? = null,
     @Property(3) val colors: ButtonColors = ButtonColors(),
@@ -146,8 +154,8 @@ public data class Button(
     @Children(1) val content: @Composable () -> Unit,
 )
 
-@Widget(15)
-public data class FloatingActionButton(
+@Widget(16)
+data class FloatingActionButton(
     @Property(1) val onClick: (() -> Unit)? = null,
     @Property(2) val shape: Shape? = null,
     @Property(3) val containerColor: Color? = null,
@@ -155,8 +163,8 @@ public data class FloatingActionButton(
     @Children(1) val content: @Composable () -> Unit,
 )
 
-@Widget(16)
-public data class MotionProgressHolder(
+@Widget(17)
+data class MotionProgressHolder(
     @Property(1) val progress: MotionProgress? = null,
     @Property(2) val divideScrollBy: Double = 1.0,
 )

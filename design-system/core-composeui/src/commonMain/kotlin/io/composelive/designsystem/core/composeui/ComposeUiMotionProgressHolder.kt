@@ -15,7 +15,7 @@ import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-internal class ComposeUiMotionProgressHolder(
+public class ComposeUiMotionProgressHolder(
   private val factory: AbstractComposeUiCoreWidgetFactory,
 ) : MotionProgressHolder<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier

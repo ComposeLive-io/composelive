@@ -16,14 +16,10 @@
 package io.composelive.treehouse
 
 import app.cash.zipline.ZiplineService
+import io.composelive.presenter.MainHostApi
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
 @OptIn(ExperimentalObjCName::class)
-@ObjCName("HostApi", exact = true)
-interface HostApi : ZiplineService {
-    /** Decodes the response as a string and returns it. */
-    suspend fun httpCall(url: String, headers: Map<String, String>): String
-
-    fun openUrl(url: String)
-}
+@ObjCName("MainHostApiService", exact = true)
+interface MainHostApiService : MainHostApi, ZiplineService

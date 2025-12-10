@@ -4,14 +4,14 @@ import app.cash.redwood.treehouse.TreehouseApp
 import app.cash.zipline.Zipline
 import app.cash.zipline.ZiplineManifest
 import app.cash.zipline.loader.FreshnessChecker
-import io.composelive.treehouse.HostApi
+import io.composelive.treehouse.MainHostApiService
 import io.composelive.treehouse.MainPresenter
 import io.composelive.treehouse.mainSerializersModule
 import kotlinx.coroutines.flow.Flow
 
 class MainAppSpec(
     override val manifestUrl: Flow<String>,
-    private val hostApi: HostApi,
+    private val hostApi: MainHostApiService,
 ) : TreehouseApp.Spec<MainPresenter>() {
 
     override val name get() = "main"

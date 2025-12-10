@@ -1,4 +1,4 @@
-package io.composelive.shared
+package io.composelive.app.treehouse
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

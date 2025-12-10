@@ -20,6 +20,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(projects.ui)
                 implementation(libs.okio)
                 implementation(libs.redwoodTreehouse)
             }

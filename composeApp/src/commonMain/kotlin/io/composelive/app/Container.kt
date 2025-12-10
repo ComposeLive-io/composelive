@@ -1,4 +1,4 @@
-package io.composelive.shared
+package io.composelive.app
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Scaffold

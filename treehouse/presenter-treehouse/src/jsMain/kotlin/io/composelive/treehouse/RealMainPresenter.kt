@@ -24,7 +24,7 @@ import io.composelive.wb.MainTreehouseUi
 import kotlinx.serialization.json.Json
 
 class RealMainPresenter(
-    private val hostApi: HostApi,
+    private val hostApi: MainHostApiService,
     json: Json,
 ) : MainPresenter {
     override val appLifecycle = StandardAppLifecycle(

@@ -44,6 +44,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared)
 
+            implementation(projects.designSystem.coreComposeui)
             implementation(projects.designSystem.motionComposeui)
             implementation(projects.ui)
             implementation(compose.runtime)
@@ -62,7 +63,6 @@ kotlin {
             implementation(libs.kotlinxSerializationJson)
 
             implementation(projects.treehouse.presenterTreehouse)
-            implementation(projects.treehouse.schemaProtocolHost)
             implementation(projects.treehouse.schemaProtocolHost)
             implementation(projects.treehouse.launcher)
             implementation(libs.redwoodTreehouse)

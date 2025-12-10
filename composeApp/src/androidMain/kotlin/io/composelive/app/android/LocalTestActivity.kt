@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.NoLiveLiterals
 import androidx.core.view.WindowCompat
-import io.composelive.shared.android.BaseActivity
 
 @NoLiveLiterals
 class LocalTestActivity : BaseActivity() {

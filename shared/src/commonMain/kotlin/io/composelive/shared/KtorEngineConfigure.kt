@@ -14,15 +14,39 @@ fun HttpClientConfig<*>.configure(baseUrl: BaseUrl) {
 }
 
 enum class BaseUrl(
-    val url: String,
-    val protocol: URLProtocol,
+    val host: String,
+    val isHttps: Boolean = false,
+    val port: Int? = null,
+    val path: String? = null,
 ) {
-    MockApi(url = "688d0588cd9d22dda5cf3ab8.mockapi.io/bdui", protocol = URLProtocol.HTTPS),
-    IosEmulatorHost(url = "localhost:8080", protocol = URLProtocol.HTTP),
-    AndroidEmulatorHost(url = "10.0.2.2:8080", protocol = URLProtocol.HTTP),
+    MockApi(host = "688d0588cd9d22dda5cf3ab8.mockapi.io/bdui", isHttps = true),
+    IosSimulatorHost(host = "localhost", port = 8080),
+    AndroidEmulatorHost(host = "10.0.2.2", port = 8080),
+
+    ;
+
+    override fun toString(): String = buildString {
+        append(if (isHttps) "https" else "http")
+        append("://")
+        append(host)
+        if (port != null) {
+            append(':')
+            append(port)
+        }
+        if (path != null) {
+            append('/')
+            append(path)
+        }
+    }
 }
 
 fun URLBuilder.setBaseUrl(baseUrl: BaseUrl) {
-    protocol = baseUrl.protocol
-    host = baseUrl.url
+    protocol = if (baseUrl.isHttps) URLProtocol.HTTPS else URLProtocol.HTTP
+    host = baseUrl.host
+    if (baseUrl.port != null) {
+        port = baseUrl.port
+    }
+    if (baseUrl.path != null) {
+        pathSegments = listOf(baseUrl.path)
+    }
 }

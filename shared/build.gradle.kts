@@ -17,58 +17,19 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            linkerOpts.add("-lsqlite3")
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
-
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidxActivityCompose)
-            implementation(libs.okhttp)
-            implementation(libs.ktorClientOkhttp)
-            implementation(libs.androidxLifecycleViewmodel)
-            implementation(libs.androidxLifecycleRuntimeCompose)
-        }
-        iosMain.dependencies {
-            implementation(libs.ktorClientDarwin)
-        }
         commonMain.dependencies {
             implementation(projects.designSystem.coreComposeui)
             implementation(projects.designSystem.motionComposeui)
             implementation(projects.ui)
             implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(libs.ktorClientCore)
             implementation(libs.coilCompose)
             implementation(libs.coilNetwork)
-            implementation(libs.redwoodCompose)
-            implementation(libs.redwoodComposeui)
-            implementation(libs.redwoodLeakDetector)
-            implementation(libs.okioAssetfilesystem)
-            implementation(libs.kotlinxSerializationJson)
-
-            implementation(projects.treehouse.presenterTreehouse)
-            implementation(projects.treehouse.schemaProtocolHost)
-            implementation(projects.treehouse.schemaProtocolHost)
-            implementation(projects.treehouse.launcher)
-            implementation(libs.redwoodTreehouse)
-            implementation(libs.redwoodTreehouseHost)
-            implementation(libs.redwoodTreehouseHostComposeui)
-            implementation(libs.zipline)
-            implementation(libs.ziplineLoader)
         }
     }
 }
@@ -84,8 +45,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-dependencies {
-    debugImplementation(compose.uiTooling)
 }

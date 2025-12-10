@@ -1,4 +1,4 @@
-package io.composelive.shared.android
+package io.composelive.app.android
 
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -12,14 +12,14 @@ import app.cash.redwood.treehouse.TreehouseAppFactory
 import app.cash.zipline.loader.ManifestVerifier
 import app.cash.zipline.loader.ZiplineHttpClient
 import app.cash.zipline.loader.asZiplineHttpClient
+import io.composelive.app.treehouse.MainTreehouseApp
+import io.composelive.app.treehouse.RealMainHostApi
+import io.composelive.app.treehouse.leakDetector
 import io.composelive.designsystem.motion.protocol.host.MotionHostProtocol
 import io.composelive.shared.BaseUrl
-import io.composelive.shared.MainTreehouseApp
-import io.composelive.shared.RealHostApi
 import io.composelive.shared.configure
-import io.composelive.shared.leakDetector
 import io.composelive.shared.rememberImageLoader
-import io.composelive.treehouse.HostApi
+import io.composelive.treehouse.MainHostApiService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import kotlinx.coroutines.CoroutineScope
@@ -60,8 +60,8 @@ abstract class BaseActivity : ComponentActivity() {
         )
     }
 
-    private fun createHostApi(httpClient: OkHttpClient): HostApi {
-        return RealHostApi(
+    private fun createHostApi(httpClient: OkHttpClient): MainHostApiService {
+        return RealMainHostApi(
             client = HttpClient(OkHttp) {
                 engine {
                     preconfigured = httpClient

@@ -1,4 +1,4 @@
-package io.composelive.shared
+package io.composelive.app.treehouse
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,9 +13,12 @@ import app.cash.redwood.treehouse.composeui.TreehouseContent
 import app.cash.zipline.loader.ZiplineHttpClient
 import app.cash.zipline.loader.withDevelopmentServerPush
 import coil3.ImageLoader
+import io.composelive.app.Container
 import io.composelive.designsystem.motion.composeui.ComposeUiDefaultWidgetSystem
 import io.composelive.launcher.MainAppSpec
-import io.composelive.treehouse.HostApi
+import io.composelive.shared.BaseUrl
+import io.composelive.shared.setBaseUrl
+import io.composelive.treehouse.MainHostApiService
 import io.composelive.treehouse.MainPresenter
 import io.ktor.http.buildUrl
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +29,7 @@ fun MainTreehouseApp(
     scope: CoroutineScope,
     appFactory: TreehouseApp.Factory,
     httpClient: ZiplineHttpClient,
-    hostApi: HostApi,
+    hostApi: MainHostApiService,
     imageLoader: ImageLoader,
     baseUrl: BaseUrl,
 ) {
@@ -72,7 +75,7 @@ private fun createTreehouseApp(
     factory: TreehouseApp.Factory,
     httpClient: ZiplineHttpClient,
     eventListener: EventListener,
-    hostApi: HostApi,
+    hostApi: MainHostApiService,
     treehouseHost: String,
 ): TreehouseApp<MainPresenter> {
 

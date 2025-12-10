@@ -1,12 +1,13 @@
-package io.composelive.shared
+package io.composelive.app.treehouse
 
-import io.composelive.treehouse.HostApi
+import io.composelive.shared.RedwoodHttpClientImpl
+import io.composelive.treehouse.MainHostApiService
 import io.ktor.client.HttpClient
 
-class RealHostApi(
+class RealMainHostApi(
     client: HttpClient,
     private val openUrl: (url: String) -> Unit,
-) : HostApi {
+) : MainHostApiService {
 
     private val redwoodClient = RedwoodHttpClientImpl(client)
 

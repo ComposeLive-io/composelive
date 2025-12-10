@@ -1,4 +1,4 @@
-package io.composelive.shared
+package io.composelive.app.treehouse
 
 import app.cash.redwood.leaks.LeakDetector
 import app.cash.redwood.leaks.RedwoodLeakApi

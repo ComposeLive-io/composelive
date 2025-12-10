@@ -37,6 +37,8 @@ import app.cash.redwood.schema.Schema
         Button::class,
         FloatingActionButton::class,
         MotionProgressHolder::class,
+        ReuseRoot::class,
+        ReuseNode::class,
 
         // Modifiers
         Reuse::class,

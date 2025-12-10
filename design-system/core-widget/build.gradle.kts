@@ -19,6 +19,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(projects.designSystem.coreModifiers)
+                api(libs.kotlinxSerializationJson)
                 implementation(projects.composeExtensions)
             }
         }

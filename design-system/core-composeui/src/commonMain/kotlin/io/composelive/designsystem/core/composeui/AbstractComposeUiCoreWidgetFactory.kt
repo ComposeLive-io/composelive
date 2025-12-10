@@ -43,6 +43,8 @@ import io.composelive.designsystem.core.widget.LazyItems
 import io.composelive.designsystem.core.widget.MotionProgressHolder
 import io.composelive.designsystem.core.widget.Pager
 import io.composelive.designsystem.core.widget.PullToRefreshBox
+import io.composelive.designsystem.core.widget.ReuseNode
+import io.composelive.designsystem.core.widget.ReuseRoot
 import io.composelive.designsystem.core.widget.Root
 import io.composelive.designsystem.core.widget.Row
 import io.composelive.designsystem.core.widget.Scaffold
@@ -56,6 +58,7 @@ import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
+import kotlinx.serialization.json.JsonElement
 
 public abstract class AbstractComposeUiCoreWidgetFactory : CoreWidgetFactory<@Composable (Modifier) -> Unit> {
   @Composable
@@ -191,6 +194,25 @@ public abstract class AbstractComposeUiCoreWidgetFactory : CoreWidgetFactory<@Co
     modifier: Modifier,
   )
 
+  @Composable
+  public abstract fun ReuseRootBinding(
+    addNode: (
+      reuseId: String,
+      type: String,
+      payload: JsonElement?,
+    ) -> Unit,
+    removeNode: (reuseId: String) -> Unit,
+    content: Children,
+    modifier: Modifier,
+  )
+
+  @Composable
+  public abstract fun ReuseNodeBinding(
+    reuseId: String,
+    content: Children,
+    modifier: Modifier,
+  )
+
   override fun Box(): Box<@Composable (Modifier) -> Unit> = ComposeUiBox(this)
 
   override fun Column(): Column<@Composable (Modifier) -> Unit> = ComposeUiColumn(this)
@@ -224,6 +246,10 @@ public abstract class AbstractComposeUiCoreWidgetFactory : CoreWidgetFactory<@Co
   override fun FloatingActionButton(): FloatingActionButton<@Composable (Modifier) -> Unit> = ComposeUiFloatingActionButton(this)
 
   override fun MotionProgressHolder(): MotionProgressHolder<@Composable (Modifier) -> Unit> = ComposeUiMotionProgressHolder(this)
+
+  override fun ReuseRoot(): ReuseRoot<@Composable (Modifier) -> Unit> = ComposeUiReuseRoot(this)
+
+  override fun ReuseNode(): ReuseNode<@Composable (Modifier) -> Unit> = ComposeUiReuseNode(this)
 
   override fun Reuse(`value`: @Composable (Modifier) -> Unit, modifier: Reuse) {
   }

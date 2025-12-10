@@ -29,6 +29,7 @@ kotlin {
 
                 implementation(libs.kotlinxCollectionsImmutable)
                 implementation(libs.androidxCollection)
+                implementation(libs.kotlinxSerializationJson)
 
                 implementation(libs.composeShimmer)
             }

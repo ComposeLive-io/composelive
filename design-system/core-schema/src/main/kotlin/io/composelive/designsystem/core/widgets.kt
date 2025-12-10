@@ -32,6 +32,7 @@ import io.composelive.designsystem.core.api.animation.EnterTransition
 import io.composelive.designsystem.core.api.animation.ExitTransition
 import io.composelive.designsystem.core.api.lazygrid.GridItemSpan
 import io.composelive.designsystem.core.api.lazygrid.ScrollItemIndex
+import kotlinx.serialization.json.JsonElement
 
 @Widget(1)
 data class Row(
@@ -167,4 +168,17 @@ data class FloatingActionButton(
 data class MotionProgressHolder(
     @Property(1) val progress: MotionProgress? = null,
     @Property(2) val divideScrollBy: Double = 1.0,
+)
+
+@Widget(18)
+data class ReuseRoot(
+    @Property(1) val addNode: (reuseId: String, type: String, payload: JsonElement?) -> Unit,
+    @Property(2) val removeNode: (reuseId: String) -> Unit,
+    @Children(1) val content: @Composable () -> Unit,
+)
+
+@Widget(19)
+data class ReuseNode(
+    @Property(1) val reuseId: String,
+    @Children(1) val content: @Composable () -> Unit,
 )

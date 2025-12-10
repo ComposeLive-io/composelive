@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     api(projects.designSystem.coreApi)
+    api(libs.kotlinxSerializationJson)
 }
 
 redwoodSchema {

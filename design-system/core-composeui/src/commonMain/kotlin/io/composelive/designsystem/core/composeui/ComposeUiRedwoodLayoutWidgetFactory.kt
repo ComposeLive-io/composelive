@@ -35,6 +35,9 @@ import io.composelive.designsystem.core.modifier.WrapContentHeight
 import io.composelive.designsystem.core.widget.LazyGrid
 import io.composelive.designsystem.core.widget.LazyItems
 import io.composelive.designsystem.core.widget.MotionProgressHolder
+import io.composelive.designsystem.core.widget.ReuseNode
+import io.composelive.designsystem.core.widget.ReuseRoot
+import kotlinx.serialization.json.JsonElement
 
 public class ComposeUiCoreWidgetFactory(
     private val imageLoader: ImageLoader,
@@ -232,6 +235,25 @@ public class ComposeUiCoreWidgetFactory(
         modifier: Modifier
     ) {
         throw AssertionError("MotionProgressHolder is redefined")
+    }
+
+    @Composable
+    override fun ReuseRootBinding(
+        addNode: (reuseId: String, type: String, payload: JsonElement?) -> Unit,
+        removeNode: (reuseId: String) -> Unit,
+        content: Children,
+        modifier: Modifier
+    ) {
+        throw AssertionError("ReuseRootBinding is redefined")
+    }
+
+    @Composable
+    override fun ReuseNodeBinding(
+        reuseId: String,
+        content: Children,
+        modifier: Modifier
+    ) {
+        throw AssertionError("ReuseNodeBinding is redefined")
     }
 
     override fun MotionProgressHolder(): MotionProgressHolder<@Composable ((Modifier) -> Unit)> =
@@ -442,5 +464,13 @@ public class ComposeUiCoreWidgetFactory(
 
     override fun LazyItems(): LazyItems<@Composable ((Modifier) -> Unit)> {
         return CoreLazyItems()
+    }
+
+    override fun ReuseRoot(): ReuseRoot<@Composable ((Modifier) -> Unit)> {
+        return CoreReuseRoot()
+    }
+
+    override fun ReuseNode(): ReuseNode<@Composable ((Modifier) -> Unit)> {
+        return CoreReuseNode()
     }
 }

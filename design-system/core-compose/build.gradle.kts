@@ -25,6 +25,7 @@ kotlin {
             dependencies {
                 api(libs.redwoodCompose)
                 api(libs.androidxCollection)
+                api(libs.kotlinxSerializationJson)
                 api(projects.designSystem.coreModifiers)
                 api(projects.designSystem.coreWidget)
             }

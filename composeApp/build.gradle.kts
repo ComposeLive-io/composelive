@@ -44,9 +44,11 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared)
 
+            implementation(projects.treehouse.extensions)
             implementation(projects.designSystem.coreComposeui)
             implementation(projects.designSystem.motionComposeui)
             implementation(projects.ui)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)

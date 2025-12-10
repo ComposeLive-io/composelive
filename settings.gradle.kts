@@ -36,6 +36,8 @@ include(":ui")
 
 include(":compose-extensions")
 
+include(":treehouse:extensions")
+
 include(":treehouse:presenter")
 include(":treehouse:launcher")
 include(":treehouse:presenter-treehouse")

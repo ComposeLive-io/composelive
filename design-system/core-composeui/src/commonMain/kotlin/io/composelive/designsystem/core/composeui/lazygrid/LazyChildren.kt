@@ -8,10 +8,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import app.cash.redwood.widget.Widget
-import io.composelive.designsystem.core.composeui.children.Tick
+import io.composelive.compose.extensions.Tick
+import io.composelive.compose.extensions.move
+import io.composelive.compose.extensions.remove
 import io.composelive.designsystem.core.composeui.modifiers.applyDefaultRedwoodModifier
-import io.composelive.designsystem.core.widget.helpers.move
-import io.composelive.designsystem.core.widget.helpers.remove
 
 @Stable
 public class LazyChildren(

@@ -19,6 +19,7 @@ kotlin {
             dependencies {
                 api(projects.designSystem.coreWidget)
                 implementation(projects.designSystem.coreModifiers)
+                implementation(projects.composeExtensions)
 
                 implementation(libs.coilCompose)
                 implementation(libs.redwoodWidgetComposeui)

@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import app.cash.redwood.widget.Widget
-import io.composelive.designsystem.core.widget.helpers.move
-import io.composelive.designsystem.core.widget.helpers.remove
+import io.composelive.compose.extensions.Tick
+import io.composelive.compose.extensions.move
+import io.composelive.compose.extensions.remove
 
 public class Children : Widget.Children<@Composable (Modifier) -> Unit> {
     public var modifierTick: Tick = Tick()

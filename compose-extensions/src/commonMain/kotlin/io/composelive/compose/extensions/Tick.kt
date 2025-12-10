@@ -1,4 +1,4 @@
-package io.composelive.designsystem.core.composeui.children
+package io.composelive.compose.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState

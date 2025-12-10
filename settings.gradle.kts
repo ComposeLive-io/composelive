@@ -34,6 +34,8 @@ include(":composeApp")
 include(":shared")
 include(":ui")
 
+include(":compose-extensions")
+
 include(":treehouse:presenter")
 include(":treehouse:launcher")
 include(":treehouse:presenter-treehouse")

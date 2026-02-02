@@ -11,7 +11,7 @@ import app.cash.redwood.ui.UiConfiguration
 import app.cash.redwood.widget.SavedStateRegistry
 import app.cash.redwood.widget.Widget
 import app.cash.redwood.widget.WidgetSystem
-import io.composelive.nodes.foundation.composeui.CoreReuseRoot
+import io.composelive.nodes.foundation.host.composeui.FoundationReuseRoot
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ReuseTreehouseView(
@@ -26,7 +26,7 @@ class ReuseTreehouseView(
         override val widgets: List<Widget<@Composable (Modifier) -> Unit>> = emptyList()
 
         override fun insert(index: Int, widget: Widget<@Composable (Modifier) -> Unit>) {
-            val root = widget as? CoreReuseRoot
+            val root = widget as? FoundationReuseRoot
             if (root != null) {
                 sharedTreehouse.reuseRootInserted(root)
             }

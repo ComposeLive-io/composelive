@@ -29,7 +29,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(projects.demo.server.presenter)
-                implementation(projects.core.nodes.standard.protocolGuest)
+                implementation(projects.core.nodes.standard.generated.protocolGuest)
                 implementation(projects.core.nodes.foundation.common)
                 implementation(libs.redwoodTreehouseGuest)
             }

@@ -16,7 +16,7 @@ import coil3.ImageLoader
 import io.composelive.app.Container
 import io.composelive.launcher.MainAppSpec
 import io.composelive.network.ManifestHostUrl
-import io.composelive.nodes.motion.composeui.ComposeUiDefaultWidgetSystem
+import io.composelive.nodes.motion.host.composeui.ComposeUiDefaultWidgetSystem
 import io.composelive.treehouse.MainHostApiService
 import io.composelive.treehouse.MainPresenter
 import kotlinx.coroutines.CoroutineScope

@@ -6,11 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.composelive.nodes.foundation.composeui.CoreReuseRoot
+import io.composelive.nodes.foundation.host.composeui.FoundationReuseRoot
 import kotlinx.serialization.json.JsonElement
 
 class SharedTreehouse {
-    private var root: CoreReuseRoot? by mutableStateOf(null)
+    private var root: FoundationReuseRoot? by mutableStateOf(null)
     private val nodesToAddAfterInit = mutableListOf<Node>()
 
     @Composable
@@ -29,7 +29,7 @@ class SharedTreehouse {
         }
     }
 
-    internal fun reuseRootInserted(root: CoreReuseRoot) {
+    internal fun reuseRootInserted(root: FoundationReuseRoot) {
         nodesToAddAfterInit.forEach { node ->
             root.addNode(
                 reuseId = node.reuseId,

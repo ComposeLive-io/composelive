@@ -18,7 +18,7 @@ import io.composelive.app.treehouse.leakDetector
 import io.composelive.network.BaseUrl
 import io.composelive.network.ManifestHostUrl
 import io.composelive.network.configure
-import io.composelive.nodes.foundation.composeui.images.rememberImageLoader
+import io.composelive.nodes.foundation.host.composeui.images.rememberImageLoader
 import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
 import io.composelive.treehouse.MainHostApiService
 import io.ktor.client.HttpClient

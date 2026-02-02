@@ -65,7 +65,7 @@ kotlin {
             implementation(libs.kotlinxSerializationJson)
 
             implementation(projects.demo.server.presenterTreehouse)
-            implementation(projects.core.nodes.standard.protocolHost)
+            implementation(projects.core.nodes.standard.generated.protocolHost)
             implementation(projects.demo.server.launcher)
             implementation(libs.redwoodTreehouse)
             implementation(libs.redwoodTreehouseHost)

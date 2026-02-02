@@ -26,14 +26,14 @@ kotlin {
                 api(libs.redwoodCompose)
                 api(libs.androidxCollection)
                 api(libs.kotlinxSerializationJson)
-                api(projects.core.nodes.foundation.generated.coreModifiers)
-                api(projects.core.nodes.foundation.generated.coreWidget)
+                api(projects.core.nodes.foundation.generated.modifiers)
+                api(projects.core.nodes.foundation.generated.widget)
             }
         }
     }
 }
 
 redwoodSchema {
-    source = projects.core.nodes.foundation.coreSchema
+    source = projects.core.nodes.foundation.schema
     type = "io.composelive.designsystem.core.Core"
 }

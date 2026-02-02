@@ -26,7 +26,7 @@ kotlin {
             implementation(compose.foundation)
 
             implementation(projects.core.composeExtensions)
-            implementation(projects.core.nodes.foundation.host.impls.coreComposeui)
+            implementation(projects.core.nodes.foundation.host.impls.composeui)
 
             implementation(libs.redwoodComposeui)
             implementation(libs.redwoodWidgetComposeui)

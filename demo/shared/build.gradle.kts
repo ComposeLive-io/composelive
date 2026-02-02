@@ -23,8 +23,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.nodes.foundation.host.impls.coreComposeui)
-            implementation(projects.core.nodes.motion.host.impls.motionComposeui)
+            implementation(projects.core.nodes.foundation.host.impls.composeui)
+            implementation(projects.core.nodes.motion.host.impls.composeui)
             implementation(projects.demo.ui)
             implementation(compose.runtime)
             implementation(libs.ktorClientCore)

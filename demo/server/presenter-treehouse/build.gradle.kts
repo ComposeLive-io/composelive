@@ -29,8 +29,8 @@ kotlin {
         jsMain {
             dependencies {
                 implementation(projects.demo.server.presenter)
-                implementation(projects.core.nodes.standard.schemaProtocolGuest)
-                implementation(projects.core.nodes.foundation.coreApi)
+                implementation(projects.core.nodes.standard.protocolGuest)
+                implementation(projects.core.nodes.foundation.common)
                 implementation(libs.redwoodTreehouseGuest)
             }
         }

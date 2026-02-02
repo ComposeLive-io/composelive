@@ -13,7 +13,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.motion.motionCompose)
+                api(projects.core.nodes.motion.live)
                 api(projects.demo.ui)
                 api(libs.okio)
                 api(libs.redwoodTreehouse)

@@ -5,7 +5,7 @@ plugins {
 
 
 dependencies {
-    api(projects.core.nodes.foundation.coreApi)
+    api(projects.core.nodes.foundation.common)
     api(libs.kotlinxSerializationJson)
 }
 

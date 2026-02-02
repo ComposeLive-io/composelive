@@ -18,7 +18,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(libs.okio)
-                api(projects.core.nodes.motion.motionCompose)
+                api(projects.core.nodes.motion.live)
                 implementation(libs.kotlinxSerializationJson)
                 implementation(libs.kotlinxCollectionsImmutable)
             }

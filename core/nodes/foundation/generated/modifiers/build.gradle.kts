@@ -18,13 +18,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.foundation.coreApi)
+                api(projects.core.nodes.foundation.common)
             }
         }
     }
 }
 
 redwoodSchema {
-    source = projects.core.nodes.foundation.coreSchema
+    source = projects.core.nodes.foundation.schema
     type = "io.composelive.designsystem.core.Core"
 }

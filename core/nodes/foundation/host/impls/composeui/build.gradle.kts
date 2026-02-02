@@ -17,8 +17,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.foundation.generated.coreWidget)
-                implementation(projects.core.nodes.foundation.generated.coreModifiers)
+                api(projects.core.nodes.foundation.generated.widget)
+                implementation(projects.core.nodes.foundation.generated.modifiers)
                 implementation(projects.core.composeExtensions)
 
                 implementation(libs.coilCompose)

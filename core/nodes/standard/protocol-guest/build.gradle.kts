@@ -5,7 +5,7 @@ plugins {
 }
 
 base {
-    archivesName = "schema-protocol-guest"
+    archivesName = "protocol-guest"
 }
 
 kotlin {
@@ -16,13 +16,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.motion.generated.motionWidget)
+                api(projects.core.nodes.motion.generated.widget)
             }
         }
     }
 }
 
 redwoodSchema {
-    source = projects.core.nodes.motion.motionSchema
+    source = projects.core.nodes.motion.schema
     type = "io.composelive.designsystem.motion.Motion"
 }

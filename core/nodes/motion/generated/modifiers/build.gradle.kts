@@ -17,6 +17,6 @@ kotlin {
 }
 
 redwoodSchema {
-    source = projects.core.nodes.motion.motionSchema
+    source = projects.core.nodes.motion.schema
     type = "io.composelive.designsystem.motion.Motion"
 }

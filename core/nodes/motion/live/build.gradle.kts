@@ -19,14 +19,14 @@ kotlin {
         commonMain {
             dependencies {
                 api(libs.redwoodCompose)
-                api(projects.core.nodes.motion.generated.motionWidget)
-                api(projects.core.nodes.foundation.coreCompose)
+                api(projects.core.nodes.motion.generated.widget)
+                api(projects.core.nodes.foundation.live)
             }
         }
     }
 }
 
 redwoodSchema {
-    source = projects.core.nodes.motion.motionSchema
+    source = projects.core.nodes.motion.schema
     type = "io.composelive.designsystem.motion.Motion"
 }

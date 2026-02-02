@@ -17,12 +17,12 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.motion.generated.motionWidget)
+                api(projects.core.nodes.motion.generated.widget)
                 api(libs.coilCompose)
                 api(compose.material3)
                 implementation(libs.constraintlayout)
                 implementation(compose.ui)
-                implementation(projects.core.nodes.foundation.host.impls.coreComposeui)
+                implementation(projects.core.nodes.foundation.host.impls.composeui)
             }
         }
     }

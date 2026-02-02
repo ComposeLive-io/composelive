@@ -45,8 +45,8 @@ kotlin {
             implementation(projects.demo.shared)
 
             implementation(projects.core.reuseTreehouse)
-            implementation(projects.core.nodes.foundation.host.impls.coreComposeui)
-            implementation(projects.core.nodes.motion.host.impls.motionComposeui)
+            implementation(projects.core.nodes.foundation.host.impls.composeui)
+            implementation(projects.core.nodes.motion.host.impls.composeui)
             implementation(projects.demo.ui)
 
             implementation(compose.runtime)
@@ -65,7 +65,7 @@ kotlin {
             implementation(libs.kotlinxSerializationJson)
 
             implementation(projects.demo.server.presenterTreehouse)
-            implementation(projects.core.nodes.standard.schemaProtocolHost)
+            implementation(projects.core.nodes.standard.protocolHost)
             implementation(projects.demo.server.launcher)
             implementation(libs.redwoodTreehouse)
             implementation(libs.redwoodTreehouseHost)

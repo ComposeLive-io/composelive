@@ -18,15 +18,15 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.foundation.generated.coreModifiers)
-                api(libs.kotlinxSerializationJson)
-                implementation(projects.core.composeExtensions)
+                api(projects.core.nodes.motion.common)
+                api(projects.core.nodes.motion.generated.modifiers)
+                api(projects.core.nodes.foundation.generated.widget)
             }
         }
     }
 }
 
 redwoodSchema {
-    source = projects.core.nodes.foundation.coreSchema
-    type = "io.composelive.designsystem.core.Core"
+    source = projects.core.nodes.motion.schema
+    type = "io.composelive.designsystem.motion.Motion"
 }

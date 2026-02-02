@@ -8,7 +8,8 @@ struct ComposeView: UIViewControllerRepresentable {
         return MainViewControllerKt.mainViewController(application: UIApplication.shared)
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
 }
 
 struct ContentView: View {

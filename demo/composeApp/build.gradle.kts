@@ -44,7 +44,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.demo.shared)
 
-            implementation(projects.core.extensions)
+            implementation(projects.core.reuseTreehouse)
             implementation(projects.core.nodes.foundation.host.impls.coreComposeui)
             implementation(projects.core.nodes.motion.host.impls.motionComposeui)
             implementation(projects.demo.ui)

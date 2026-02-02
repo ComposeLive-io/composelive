@@ -38,7 +38,7 @@ include(":demo:server:launcher")
 include(":demo:server:presenter-treehouse")
 
 include(":core:compose-extensions")
-include(":core:extensions")
+include(":core:reuse-treehouse")
 
 include(":core:nodes:foundation:core-schema")
 include(":core:nodes:foundation:core-api")

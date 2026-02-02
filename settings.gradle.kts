@@ -37,15 +37,12 @@ include(":demo:server:launcher")
 include(":demo:server:presenter-treehouse")
 include(":demo:server:network")
 
-include(":core:compose-extensions")
-include(":core:reuse-treehouse")
-
 include(":core:nodes:foundation:schema")
 include(":core:nodes:foundation:common")
 include(":core:nodes:foundation:live")
 include(":core:nodes:foundation:host:impls:composeui")
-include(":core:nodes:foundation:generated:modifiers")
 include(":core:nodes:foundation:generated:widget")
+include(":core:nodes:foundation:generated:modifiers")
 
 include(":core:nodes:motion:schema")
 include(":core:nodes:motion:common")
@@ -61,3 +58,6 @@ include(":core:nodes:standard:generated:widget")
 include(":core:nodes:standard:generated:modifiers")
 include(":core:nodes:standard:generated:protocol-guest")
 include(":core:nodes:standard:generated:protocol-host")
+
+include(":core:compose-extensions")
+include(":core:reuse-treehouse")

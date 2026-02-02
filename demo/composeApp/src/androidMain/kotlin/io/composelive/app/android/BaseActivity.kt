@@ -15,7 +15,7 @@ import app.cash.zipline.loader.asZiplineHttpClient
 import io.composelive.app.treehouse.MainTreehouseApp
 import io.composelive.app.treehouse.RealMainHostApi
 import io.composelive.app.treehouse.leakDetector
-import io.composelive.designsystem.motion.protocol.host.MotionHostProtocol
+import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
 import io.composelive.shared.BaseUrl
 import io.composelive.shared.configure
 import io.composelive.shared.rememberImageLoader

@@ -6,7 +6,7 @@ import app.cash.redwood.treehouse.TreehouseAppFactory
 import app.cash.zipline.loader.ManifestVerifier
 import app.cash.zipline.loader.ZiplineHttpClient
 import io.composelive.app.treehouse.leakDetector
-import io.composelive.designsystem.motion.protocol.host.MotionHostProtocol
+import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(RedwoodLeakApi::class)

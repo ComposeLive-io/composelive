@@ -10,5 +10,5 @@ dependencies {
 }
 
 redwoodSchema {
-    type = "io.composelive.designsystem.core.Core"
+    type = "io.composelive.nodes.foundation.Foundation"
 }

@@ -26,5 +26,5 @@ kotlin {
 
 redwoodSchema {
     source = projects.core.nodes.foundation.schema
-    type = "io.composelive.designsystem.core.Core"
+    type = "io.composelive.nodes.foundation.Foundation"
 }

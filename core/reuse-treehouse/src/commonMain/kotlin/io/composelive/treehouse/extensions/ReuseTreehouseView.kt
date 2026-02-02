@@ -11,7 +11,7 @@ import app.cash.redwood.ui.UiConfiguration
 import app.cash.redwood.widget.SavedStateRegistry
 import app.cash.redwood.widget.Widget
 import app.cash.redwood.widget.WidgetSystem
-import io.composelive.designsystem.core.composeui.CoreReuseRoot
+import io.composelive.nodes.foundation.composeui.CoreReuseRoot
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ReuseTreehouseView(

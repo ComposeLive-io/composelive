@@ -14,7 +14,7 @@ import app.cash.zipline.loader.ZiplineHttpClient
 import app.cash.zipline.loader.withDevelopmentServerPush
 import coil3.ImageLoader
 import io.composelive.app.Container
-import io.composelive.designsystem.motion.composeui.ComposeUiDefaultWidgetSystem
+import io.composelive.nodes.motion.composeui.ComposeUiDefaultWidgetSystem
 import io.composelive.launcher.MainAppSpec
 import io.composelive.shared.BaseUrl
 import io.composelive.shared.setBaseUrl

@@ -1,7 +1,7 @@
 package io.composelive.presenter
 
 import androidx.compose.runtime.Composable
-import io.composelive.designsystem.core.compose.Text
+import io.composelive.nodes.foundation.compose.Text
 
 @Composable
 fun Main() {

@@ -9,5 +9,5 @@ dependencies {
 }
 
 redwoodSchema {
-    type = "io.composelive.designsystem.motion.Motion"
+    type = "io.composelive.nodes.motion.Motion"
 }

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.composelive.designsystem.core.composeui.DefaultTheme
+import io.composelive.nodes.foundation.composeui.DefaultTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.composelive.designsystem.core.composeui.CoreReuseRoot
+import io.composelive.nodes.foundation.composeui.CoreReuseRoot
 import kotlinx.serialization.json.JsonElement
 
 class SharedTreehouse {

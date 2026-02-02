@@ -15,10 +15,11 @@ import app.cash.zipline.loader.asZiplineHttpClient
 import io.composelive.app.treehouse.MainTreehouseApp
 import io.composelive.app.treehouse.RealMainHostApi
 import io.composelive.app.treehouse.leakDetector
-import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
-import io.composelive.shared.BaseUrl
-import io.composelive.shared.configure
+import io.composelive.network.BaseUrl
+import io.composelive.network.ManifestHostUrl
+import io.composelive.network.configure
 import io.composelive.nodes.foundation.composeui.images.rememberImageLoader
+import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
 import io.composelive.treehouse.MainHostApiService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -43,7 +44,7 @@ abstract class BaseActivity : ComponentActivity() {
             httpClient = httpClient,
             hostApi = remember { createHostApi(okHttpClient) },
             imageLoader = rememberImageLoader { this },
-            baseUrl = BaseUrl.AndroidEmulatorHost,
+            hostUrl = ManifestHostUrl.AndroidEmulatorHost,
         )
     }
 

@@ -6,7 +6,7 @@ import app.cash.redwood.compose.ConsumeInsets
 import app.cash.redwood.treehouse.TreehouseUi
 import io.composelive.designsystem.core.compose.Root
 import io.composelive.presenter.Main
-import io.composelive.presenter.network.HttpClient
+import io.composelive.network.HttpClient
 import io.composelive.presenter.presentation.Navigator
 import kotlinx.serialization.json.Json
 

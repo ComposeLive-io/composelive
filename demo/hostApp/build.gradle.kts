@@ -42,7 +42,7 @@ kotlin {
             implementation(libs.ktorClientDarwin)
         }
         commonMain.dependencies {
-            implementation(projects.demo.shared)
+            implementation(projects.demo.server.network)
 
             implementation(projects.core.reuseTreehouse)
             implementation(projects.core.nodes.foundation.host.impls.composeui)

@@ -14,13 +14,11 @@ import app.cash.zipline.loader.ZiplineHttpClient
 import app.cash.zipline.loader.withDevelopmentServerPush
 import coil3.ImageLoader
 import io.composelive.app.Container
-import io.composelive.nodes.motion.composeui.ComposeUiDefaultWidgetSystem
 import io.composelive.launcher.MainAppSpec
-import io.composelive.shared.BaseUrl
-import io.composelive.shared.setBaseUrl
+import io.composelive.network.ManifestHostUrl
+import io.composelive.nodes.motion.composeui.ComposeUiDefaultWidgetSystem
 import io.composelive.treehouse.MainHostApiService
 import io.composelive.treehouse.MainPresenter
-import io.ktor.http.buildUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 
@@ -31,7 +29,7 @@ fun MainTreehouseApp(
     httpClient: ZiplineHttpClient,
     hostApi: MainHostApiService,
     imageLoader: ImageLoader,
-    baseUrl: BaseUrl,
+    hostUrl: ManifestHostUrl,
 ) {
     val treehouseContentSource = remember { TreehouseContentSource(MainPresenter::launch) }
     val eventListener = remember { MainEventListener() }
@@ -46,9 +44,7 @@ fun MainTreehouseApp(
             httpClient = httpClient,
             eventListener = eventListener,
             hostApi = hostApi,
-            treehouseHost = buildUrl {
-                setBaseUrl(baseUrl)
-            }.toString(),
+            treehouseHost = hostUrl.url.toString(),
         )
     }
     Container { contentPadding ->

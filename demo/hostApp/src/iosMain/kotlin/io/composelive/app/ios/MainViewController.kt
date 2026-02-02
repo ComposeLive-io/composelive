@@ -7,7 +7,7 @@ import coil3.PlatformContext
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.serviceLoaderEnabled
 import io.composelive.app.treehouse.MainTreehouseApp
-import io.composelive.shared.BaseUrl
+import io.composelive.network.ManifestHostUrl
 import io.composelive.treehouse.MainHostApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -36,7 +36,7 @@ fun mainViewController(application: UIApplication, hostApi: MainHostApiService):
             httpClient = httpClient,
             hostApi = hostApi,
             imageLoader = imageLoader,
-            baseUrl = BaseUrl.IosSimulatorHost,
+            hostUrl = ManifestHostUrl.IosSimulatorHost,
         )
     }
 }

@@ -31,11 +31,11 @@ dependencyResolutionManagement {
 }
 
 include(":demo:hostApp")
-include(":demo:shared")
 include(":demo:ui")
 include(":demo:server:presenter")
 include(":demo:server:launcher")
 include(":demo:server:presenter-treehouse")
+include(":demo:server:network")
 
 include(":core:compose-extensions")
 include(":core:reuse-treehouse")

@@ -1,6 +1,6 @@
 package io.composelive.app.treehouse
 
-import io.composelive.shared.RedwoodHttpClientImpl
+import io.composelive.network.RedwoodHttpClientImpl
 import io.composelive.treehouse.MainHostApiService
 import io.ktor.client.HttpClient
 

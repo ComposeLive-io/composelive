@@ -29,7 +29,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(libs.ktorClientCore)
             implementation(libs.coilCompose)
-            implementation(libs.coilNetwork)
+            implementation(libs.coilNetworkKtor)
         }
     }
 }

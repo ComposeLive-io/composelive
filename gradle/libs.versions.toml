@@ -29,7 +29,7 @@ androidxActivityCompose = { module = "androidx.activity:activity-compose", versi
 androidxLifecycleViewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidxLifecycle" }
 androidxLifecycleRuntimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 coilCompose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coilNetwork = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+coilNetworkKtor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 
 kotlinxCollectionsImmutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSeraialization" }

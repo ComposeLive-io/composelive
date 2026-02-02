@@ -57,7 +57,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.ktorClientCore)
             implementation(libs.coilCompose)
-            implementation(libs.coilNetwork)
+            implementation(libs.coilNetworkKtor)
             implementation(libs.redwoodCompose)
             implementation(libs.redwoodComposeui)
             implementation(libs.redwoodLeakDetector)

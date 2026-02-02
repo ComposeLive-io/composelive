@@ -32,6 +32,7 @@ kotlin {
                 implementation(libs.kotlinxSerializationJson)
 
                 implementation(libs.composeShimmer)
+                implementation(libs.coilNetworkKtor)
             }
         }
     }

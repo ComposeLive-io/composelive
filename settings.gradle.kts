@@ -30,7 +30,7 @@ dependencyResolutionManagement {
     }
 }
 
-include(":demo:composeApp")
+include(":demo:hostApp")
 include(":demo:shared")
 include(":demo:ui")
 include(":demo:server:presenter")

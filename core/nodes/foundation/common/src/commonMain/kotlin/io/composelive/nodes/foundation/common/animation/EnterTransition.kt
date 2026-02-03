@@ -23,10 +23,10 @@ public value class EnterTransition(public val value: Int) {
 
     public object Ids {
         // @formatter:off
-        public const val FADE_IN: Int               = 0b1
-        public const val SCALE_IN: Int              = 0b10
-        public const val EXPAND_IN: Int             = 0b100
-        public const val SLIDE_IN_HORIZONTALLY: Int = 0b1000
+        public const val FADE_IN: Int               =     0b1
+        public const val SCALE_IN: Int              =    0b10
+        public const val EXPAND_IN: Int             =   0b100
+        public const val SLIDE_IN_HORIZONTALLY: Int =  0b1000
         public const val SLIDE_IN_VERTICALLY: Int   = 0b10000
         // @formatter:on
     }

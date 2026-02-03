@@ -23,10 +23,10 @@ public value class ExitTransition(public val value: Int) {
 
     public object Ids {
         // @formatter:off
-        public const val FADE_OUT: Int               = 0b1
-        public const val SCALE_OUT: Int              = 0b10
-        public const val SHRINK_OUT: Int             = 0b100
-        public const val SLIDE_OUT_HORIZONTALLY: Int = 0b1000
+        public const val FADE_OUT: Int               =     0b1
+        public const val SCALE_OUT: Int              =    0b10
+        public const val SHRINK_OUT: Int             =   0b100
+        public const val SLIDE_OUT_HORIZONTALLY: Int =  0b1000
         public const val SLIDE_OUT_VERTICALLY: Int   = 0b10000
         // @formatter:on
     }

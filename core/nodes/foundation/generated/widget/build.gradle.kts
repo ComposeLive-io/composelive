@@ -20,7 +20,6 @@ kotlin {
             dependencies {
                 api(projects.core.nodes.foundation.generated.modifiers)
                 api(libs.kotlinxSerializationJson)
-                implementation(projects.core.composeExtensions)
             }
         }
     }

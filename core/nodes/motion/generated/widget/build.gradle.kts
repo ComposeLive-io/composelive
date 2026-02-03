@@ -20,7 +20,7 @@ kotlin {
             dependencies {
                 api(projects.core.nodes.motion.common)
                 api(projects.core.nodes.motion.generated.modifiers)
-                api(projects.core.nodes.foundation.generated.widget)
+                api(projects.core.nodes.foundation.common)
             }
         }
     }

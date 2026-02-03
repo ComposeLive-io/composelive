@@ -16,20 +16,20 @@ kotlin {
     
     sourceSets {
         commonMain {
+            kotlin.srcDir("src/commonMain/generated")
             dependencies {
-                api(projects.core.nodes.motion.generated.widget)
-                api(libs.coilCompose)
-                api(compose.material3)
-                implementation(libs.constraintlayout)
-                implementation(compose.ui)
+                api(libs.constraintlayout)
+
+                implementation(projects.core.nodes.motion.generated.widget)
                 implementation(projects.core.nodes.foundation.host.impls.composeui)
+                implementation(compose.ui)
             }
         }
     }
 }
 
 android {
-    namespace = "io.composelive.designsystem.motion.composeui"
+    namespace = "io.composelive.nodes.motion.host.composeui"
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.androidMinSdk.get().toInt()

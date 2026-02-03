@@ -23,11 +23,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(libs.redwoodCompose)
-                api(libs.androidxCollection)
                 api(libs.kotlinxSerializationJson)
-                api(projects.core.nodes.foundation.generated.modifiers)
-                api(projects.core.nodes.foundation.generated.widget)
+
+                implementation(projects.core.nodes.foundation.generated.widget)
+                implementation(libs.androidxCollection)
             }
         }
     }

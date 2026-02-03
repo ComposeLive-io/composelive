@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    api(projects.core.nodes.motion.common)
-    api(projects.core.nodes.foundation.schema)
+    implementation(projects.core.nodes.motion.common)
+    implementation(projects.core.nodes.foundation.common)
 }
 
 redwoodSchema {

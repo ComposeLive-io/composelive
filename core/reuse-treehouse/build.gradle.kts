@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -10,31 +7,24 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
+    explicitApi()
+
+    androidTarget()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
+            api(libs.redwoodWidget)
+            api(libs.kotlinxSerializationJson)
 
-            implementation(projects.core.composeExtensions)
+            implementation(compose.runtime)
             implementation(projects.core.nodes.foundation.host.impls.composeui)
 
             implementation(libs.redwoodComposeui)
-            implementation(libs.redwoodWidgetComposeui)
-            implementation(libs.redwoodTreehouse)
-            implementation(libs.redwoodTreehouseHost)
+
             implementation(libs.redwoodTreehouseHostComposeui)
-            implementation(libs.zipline)
-            implementation(libs.ziplineLoader)
         }
         androidMain.dependencies {
             implementation(libs.androidxActivityCompose)

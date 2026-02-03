@@ -5,8 +5,8 @@ plugins {
 
 
 dependencies {
-    api(projects.core.nodes.foundation.common)
-    api(libs.kotlinxSerializationJson)
+    implementation(projects.core.nodes.foundation.common)
+    implementation(libs.kotlinxSerializationJson)
 }
 
 redwoodSchema {

@@ -20,9 +20,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core.nodes.foundation.common)
+                api(libs.redwoodRuntime)
+
                 implementation(compose.runtime)
-                implementation(libs.redwoodRuntime)
                 implementation(libs.kotlinxSerializationCore)
             }
         }

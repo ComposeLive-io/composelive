@@ -18,9 +18,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(libs.redwoodCompose)
-                api(projects.core.nodes.motion.generated.widget)
-                api(projects.core.nodes.foundation.live)
+                api(projects.core.nodes.foundation.common)
+                api(projects.core.nodes.motion.common)
+
+                implementation(projects.core.nodes.motion.generated.widget)
             }
         }
     }

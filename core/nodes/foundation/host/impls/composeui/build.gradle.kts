@@ -16,30 +16,31 @@ kotlin {
 
     sourceSets {
         commonMain {
+            kotlin.srcDir("src/commonMain/generated")
             dependencies {
                 api(projects.core.nodes.foundation.generated.widget)
-                implementation(projects.core.nodes.foundation.generated.modifiers)
+                api(libs.coil)
+                api(compose.foundation)
+
                 implementation(projects.core.composeExtensions)
 
                 implementation(libs.coilCompose)
+                implementation(libs.coilNetworkKtor)
                 implementation(libs.redwoodWidgetComposeui)
 
-                implementation(compose.foundation)
                 implementation(compose.material3)
 
                 implementation(libs.kotlinxCollectionsImmutable)
                 implementation(libs.androidxCollection)
-                implementation(libs.kotlinxSerializationJson)
 
                 implementation(libs.composeShimmer)
-                implementation(libs.coilNetworkKtor)
             }
         }
     }
 }
 
 android {
-    namespace = "io.composelive.designsystem.core.composeui"
+    namespace = "io.composelive.nodes.foundation.host.composeui"
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.androidMinSdk.get().toInt()

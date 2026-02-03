@@ -43,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.composelive.shared"
+    namespace = "io.composelive.reuse"
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
 
     defaultConfig {

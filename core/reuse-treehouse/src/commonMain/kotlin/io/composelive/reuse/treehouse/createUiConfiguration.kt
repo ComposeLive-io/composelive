@@ -1,10 +1,10 @@
-package io.composelive.treehouse.extensions
+package io.composelive.reuse.treehouse
 
 import app.cash.redwood.ui.Margin
 import app.cash.redwood.ui.UiConfiguration
 import app.cash.redwood.ui.LayoutDirection as RedwoodLayoutDirection
 
-fun createUiConfiguration(
+public fun createUiConfiguration(
     safeAreaInsets: Margin,
     density: Double,
     darkMode: Boolean,

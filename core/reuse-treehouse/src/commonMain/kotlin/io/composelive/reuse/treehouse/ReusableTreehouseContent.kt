@@ -1,4 +1,4 @@
-package io.composelive.treehouse.extensions
+package io.composelive.reuse.treehouse
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
@@ -19,13 +19,13 @@ import app.cash.redwood.widget.WidgetSystem
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun <A : AppService> rememberSharedTreehouse(
+public fun <A : AppService> rememberSharedTreehouse(
     treehouseApp: TreehouseApp<A>,
     widgetSystem: WidgetSystem<@Composable (Modifier) -> Unit>,
     contentSource: TreehouseContentSource<A>,
     dynamicContentWidgetFactory: DynamicContentWidgetFactory<@Composable (Modifier) -> Unit>,
-): SharedTreehouse {
-    val sharedTreehouse = remember { SharedTreehouse() }
+): ReuseController {
+    val reuseController = remember { ReuseController() }
     val onBackPressedDispatcher = platformOnBackPressedDispatcher()
 
     val density = LocalDensity.current
@@ -46,7 +46,7 @@ fun <A : AppService> rememberSharedTreehouse(
     }
     val treehouseView = remember(widgetSystem) {
         ReuseTreehouseView(
-            sharedTreehouse = sharedTreehouse,
+            reuseController = reuseController,
             widgetSystem = widgetSystem,
             dynamicContentWidgetFactory = dynamicContentWidgetFactory,
             onBackPressedDispatcher = onBackPressedDispatcher,
@@ -59,5 +59,5 @@ fun <A : AppService> rememberSharedTreehouse(
             closeable.close()
         }
     }
-    return sharedTreehouse
+    return reuseController
 }

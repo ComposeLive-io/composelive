@@ -43,6 +43,7 @@ ktorClientDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor"
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 
 redwoodRuntime = { module = "app.cash.redwood:redwood-runtime", version.ref = "redwood" }
+redwoodWidget = { module = "app.cash.redwood:redwood-widget", version.ref = "redwood" }
 redwoodCompose = { module = "app.cash.redwood:redwood-compose", version.ref = "redwood" }
 redwoodComposeui = { module = "app.cash.redwood:redwood-composeui", version.ref = "redwood" }
 redwoodTreehouse = { module = "app.cash.redwood:redwood-treehouse", version.ref = "redwood" }

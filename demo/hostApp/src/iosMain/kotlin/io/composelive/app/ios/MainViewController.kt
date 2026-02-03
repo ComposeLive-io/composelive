@@ -16,7 +16,10 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
 @Suppress("unused") // Used from Swift
-fun mainViewController(application: UIApplication, hostApi: MainHostApiService): UIViewController {
+fun mainViewController(
+    application: UIApplication,
+    hostApi: MainHostApiService,
+): UIViewController {
     val scope: CoroutineScope = MainScope()
 
     val httpClient = NSURLSession.sharedSession.asZiplineHttpClient()

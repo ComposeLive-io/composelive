@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -10,12 +7,7 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
+    androidTarget()
 
     listOf(
         iosX64(),
@@ -29,9 +21,29 @@ kotlin {
     }
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(projects.demo.live)
 
+            implementation(projects.core.nodes.standard.host.impls.composeui)
+
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.coilCompose)
+            implementation(libs.redwoodComposeui)
+            implementation(libs.redwoodTreehouseHostComposeui)
+            implementation(libs.okioAssetfilesystem)
+
+            implementation(projects.core.nodes.standard.generated.protocolHost)
+            implementation(projects.demo.server.network)
+
+            implementation(projects.core.reuseTreehouse)
+
+            implementation(projects.demo.server.treehouse)
+        }
         androidMain.dependencies {
-            implementation(compose.preview)
             implementation(libs.androidxActivityCompose)
             implementation(libs.okhttp)
             implementation(libs.ktorClientOkhttp)
@@ -41,38 +53,6 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktorClientDarwin)
         }
-        commonMain.dependencies {
-            implementation(projects.demo.server.network)
-
-            implementation(projects.core.reuseTreehouse)
-            implementation(projects.core.nodes.foundation.host.impls.composeui)
-            implementation(projects.core.nodes.motion.host.impls.composeui)
-            implementation(projects.demo.ui)
-
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.ktorClientCore)
-            implementation(libs.coilCompose)
-            implementation(libs.coilNetworkKtor)
-            implementation(libs.redwoodCompose)
-            implementation(libs.redwoodComposeui)
-            implementation(libs.redwoodLeakDetector)
-            implementation(libs.okioAssetfilesystem)
-            implementation(libs.kotlinxSerializationJson)
-
-            implementation(projects.demo.server.presenterTreehouse)
-            implementation(projects.core.nodes.standard.generated.protocolHost)
-            implementation(projects.demo.server.launcher)
-            implementation(libs.redwoodTreehouse)
-            implementation(libs.redwoodTreehouseHost)
-            implementation(libs.redwoodTreehouseHostComposeui)
-            implementation(libs.zipline)
-            implementation(libs.ziplineLoader)
-        }
     }
 }
 
@@ -81,7 +61,7 @@ android {
     compileSdk = libs.versions.androidCompileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "io.composelive.app"
+        applicationId = "io.composelive.hostApp"
         minSdk = libs.versions.androidMinSdk.get().toInt()
         targetSdk = libs.versions.androidTargetSdk.get().toInt()
         versionCode = 1
@@ -93,7 +73,7 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("debug")
         }

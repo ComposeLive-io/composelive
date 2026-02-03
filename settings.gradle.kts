@@ -31,10 +31,8 @@ dependencyResolutionManagement {
 }
 
 include(":demo:hostApp")
-include(":demo:ui")
-include(":demo:server:presenter")
-include(":demo:server:launcher")
-include(":demo:server:presenter-treehouse")
+include(":demo:live")
+include(":demo:server:treehouse")
 include(":demo:server:network")
 
 include(":core:nodes:foundation:schema")

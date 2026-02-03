@@ -14,9 +14,8 @@ import app.cash.zipline.loader.ZiplineHttpClient
 import app.cash.zipline.loader.withDevelopmentServerPush
 import coil3.ImageLoader
 import io.composelive.app.Container
-import io.composelive.launcher.MainAppSpec
 import io.composelive.network.ManifestHostUrl
-import io.composelive.nodes.motion.host.composeui.ComposeUiDefaultWidgetSystem
+import io.composelive.nodes.standard.host.composeui.ComposeUiStandardWidgetSystem
 import io.composelive.treehouse.MainHostApiService
 import io.composelive.treehouse.MainPresenter
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +49,7 @@ fun MainTreehouseApp(
     Container { contentPadding ->
         TreehouseContent(
             treehouseApp = treehouseApp,
-            widgetSystem = ComposeUiDefaultWidgetSystem(imageLoader),
+            widgetSystem = ComposeUiStandardWidgetSystem(imageLoader),
             contentSource = treehouseContentSource,
             modifier = Modifier.padding(contentPadding),
             dynamicContentWidgetFactory = MainDynamicContentWidgetFactory(),

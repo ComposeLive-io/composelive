@@ -17,7 +17,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.ktorClientCore)
-            api(projects.demo.ui)
+            api(projects.demo.live)
         }
     }
 }

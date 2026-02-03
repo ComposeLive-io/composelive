@@ -11,7 +11,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".android.LocalTestActivity"
+            android:name=".android.treehouse.MainTreehouseActivity"
             android:screenOrientation="userPortrait"
             android:exported="true">
             <intent-filter>

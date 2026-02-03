@@ -6,7 +6,7 @@ import app.cash.redwood.treehouse.TreehouseAppFactory
 import app.cash.zipline.loader.ManifestVerifier
 import app.cash.zipline.loader.ZiplineHttpClient
 import io.composelive.app.treehouse.leakDetector
-import io.composelive.nodes.motion.protocol.host.MotionHostProtocol
+import io.composelive.nodes.standard.protocol.host.StandardHostProtocol
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(RedwoodLeakApi::class)
@@ -18,6 +18,6 @@ internal fun createTreehouseAppFactory(
         httpClient = httpClient,
         manifestVerifier = ManifestVerifier.NO_SIGNATURE_CHECKS,
         leakDetector = leakDetector(scope),
-        hostProtocolFactory = MotionHostProtocol,
+        hostProtocolFactory = StandardHostProtocol,
     )
 }

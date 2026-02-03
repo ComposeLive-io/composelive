@@ -8,11 +8,14 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.serviceLoaderEnabled
 
 @Composable
-public fun rememberImageLoader(createContext: () -> PlatformContext): ImageLoader = remember {
-    ImageLoader.Builder(createContext())
-        .serviceLoaderEnabled(false)
-        .components {
-            add(KtorNetworkFetcherFactory())
-        }
-        .build()
-}
+public fun rememberImageLoader(createContext: () -> PlatformContext): ImageLoader =
+    remember {
+        createImageLoader(createContext())
+    }
+
+public fun createImageLoader(context: PlatformContext): ImageLoader = ImageLoader.Builder(context)
+    .serviceLoaderEnabled(false)
+    .components {
+        add(KtorNetworkFetcherFactory())
+    }
+    .build()

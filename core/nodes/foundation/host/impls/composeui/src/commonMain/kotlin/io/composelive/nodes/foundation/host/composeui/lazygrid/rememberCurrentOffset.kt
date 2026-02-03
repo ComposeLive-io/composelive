@@ -23,12 +23,15 @@ internal fun rememberCurrentOffset(state: LazyGridState): IntState {
             lastPosition == null || position.value == 0 -> {
                 currentOffset.intValue = itemOffset.value
             }
+
             lastPosition == position.value -> {
                 currentOffset.intValue += (itemOffset.value - (lastItemOffset ?: 0))
             }
+
             lastPosition > position.value -> {
                 currentOffset.intValue -= (lastItemOffset ?: 0)
             }
+
             else -> { // lastPosition.value < position.value
                 currentOffset.intValue += itemOffset.value
             }

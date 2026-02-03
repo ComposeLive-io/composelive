@@ -15,22 +15,16 @@
  */
 package io.composelive.nodes.motion
 
-import androidx.compose.runtime.Composable
 import app.cash.redwood.schema.Children
 import app.cash.redwood.schema.Property
 import app.cash.redwood.schema.Schema
-import app.cash.redwood.schema.Schema.Dependency
 import app.cash.redwood.schema.Widget
 import io.composelive.nodes.foundation.common.MotionProgress
 import io.composelive.nodes.motion.common.MotionScene
-import io.composelive.nodes.foundation.Foundation
 
 @Schema(
     members = [
         MotionLayout::class,
-    ],
-    dependencies = [
-        Dependency(1, Foundation::class),
     ],
 )
 interface Motion
@@ -39,5 +33,5 @@ interface Motion
 data class MotionLayout(
     @Property(1) val motionScene: MotionScene? = null,
     @Property(2) val progress: MotionProgress? = null,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )

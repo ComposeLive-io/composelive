@@ -16,6 +16,7 @@ kotlin {
 
     sourceSets {
         commonMain {
+            kotlin.srcDir("src/commonMain/generated")
             dependencies {
                 api(projects.core.nodes.standard.generated.widget)
                 api(projects.core.nodes.foundation.host.impls.composeui)

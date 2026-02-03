@@ -9,7 +9,6 @@ import app.cash.redwood.treehouse.TreehouseView.ReadyForContentChangeListener
 import app.cash.redwood.ui.OnBackPressedDispatcher
 import app.cash.redwood.ui.UiConfiguration
 import app.cash.redwood.widget.SavedStateRegistry
-import app.cash.redwood.widget.Widget
 import app.cash.redwood.widget.WidgetSystem
 import kotlinx.coroutines.flow.MutableStateFlow
 

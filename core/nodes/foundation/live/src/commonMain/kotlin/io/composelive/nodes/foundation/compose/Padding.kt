@@ -1,10 +1,9 @@
-package io.composelive.nodes.foundation.compose.modifiers
+package io.composelive.nodes.foundation.compose
 
 import app.cash.redwood.Modifier
 import app.cash.redwood.ui.Dp
 import app.cash.redwood.ui.dp
 import io.composelive.nodes.foundation.common.PaddingValues
-import io.composelive.nodes.foundation.compose.padding
 
 public fun Modifier.padding(
     start: Dp = 0.dp,

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import io.composelive.nodes.foundation.host.composeui.children.Children
+import io.composelive.nodes.foundation.host.composeui.modifiers.applyDefaultRedwoodModifier
 import io.composelive.nodes.foundation.widget.ReuseNode
 import app.cash.redwood.Modifier as RedwoodModifier
 

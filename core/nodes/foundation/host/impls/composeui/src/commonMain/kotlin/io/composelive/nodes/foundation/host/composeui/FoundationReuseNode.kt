@@ -15,8 +15,14 @@ public class FoundationReuseNode : ReuseNode<@Composable (Modifier) -> Unit> {
     override var modifier: RedwoodModifier = RedwoodModifier
     override val content: Children = Children()
 
-    override val value: @Composable ((Modifier) -> Unit) = {
-        ComposeChildren(content)
+    override val value: @Composable ((Modifier) -> Unit) = { modifier ->
+        require(content.widgets.size <= 1) { "ReuseNode can have maximum 1 child" }
+        ComposeChildren(
+            children = content,
+            applyModifier = { widget ->
+                applyDefaultRedwoodModifier(modifier, widget.modifier)
+            }
+        )
     }
 
     override fun reuseId(reuseId: String) {

@@ -362,8 +362,11 @@ public class ComposeUiFoundationWidgetFactory(
         content: Children,
         modifier: Modifier,
     ) {
+        require(content.widgets.size <= 1) { "Root can have maximum 1 child" }
         FoundationRoot(modifier = modifier, imageLoader = imageLoader) {
-            ComposeChildren(content)
+            ComposeChildren(content) { widget ->
+                applyDefaultRedwoodModifier(modifier, widget.modifier)
+            }
         }
     }
 

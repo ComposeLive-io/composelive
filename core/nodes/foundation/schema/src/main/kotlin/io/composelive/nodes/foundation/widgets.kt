@@ -15,7 +15,6 @@
  */
 package io.composelive.nodes.foundation
 
-import androidx.compose.runtime.Composable
 import app.cash.redwood.schema.Children
 import app.cash.redwood.schema.Property
 import app.cash.redwood.schema.Widget
@@ -107,10 +106,10 @@ data class PullToRefreshBox(
 @Widget(9)
 data class Scaffold(
     @Property(1) val paddingValuesChanged: (PaddingValues) -> Unit,
-    @Children(1) val topBar: @Composable () -> Unit = {},
-    @Children(2) val bottomBar: @Composable () -> Unit = {},
-    @Children(3) val floatingActionButton: @Composable () -> Unit = {},
-    @Children(4) val content: @Composable () -> Unit,
+    @Children(1) val topBar: () -> Unit = {},
+    @Children(2) val bottomBar: () -> Unit = {},
+    @Children(3) val floatingActionButton: () -> Unit = {},
+    @Children(4) val content: () -> Unit,
 )
 
 @Widget(10)
@@ -118,12 +117,12 @@ data class AnimatedVisibility(
     @Property(1) val visible: Boolean = true,
     @Property(2) val enter: EnterTransition = EnterTransition.fadeIn + EnterTransition.expandIn,
     @Property(3) val exit: ExitTransition = ExitTransition.shrinkOut + ExitTransition.fadeOut,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )
 
 @Widget(11)
 data class Root(
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )
 
 @Widget(12)
@@ -152,7 +151,7 @@ data class Button(
     @Property(2) val shape: Shape? = null,
     @Property(3) val colors: ButtonColors = ButtonColors(),
     @Property(4) val onClick: (() -> Unit)? = null,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )
 
 @Widget(16)
@@ -161,7 +160,7 @@ data class FloatingActionButton(
     @Property(2) val shape: Shape? = null,
     @Property(3) val containerColor: Color? = null,
     @Property(4) val contentColor: Color? = null,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )
 
 @Widget(17)
@@ -174,11 +173,11 @@ data class MotionProgressHolder(
 data class ReuseRoot(
     @Property(1) val addNode: (reuseId: String, type: String, payload: JsonElement?) -> Unit,
     @Property(2) val removeNode: (reuseId: String) -> Unit,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )
 
-@Widget(19)
+@Widget(29)
 data class ReuseNode(
     @Property(1) val reuseId: String,
-    @Children(1) val content: @Composable () -> Unit,
+    @Children(1) val content: () -> Unit,
 )

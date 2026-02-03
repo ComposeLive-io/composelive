@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 
-package io.composelive.nodes.foundation.host.composeui
+package io.composelive.nodes.foundation.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,21 +8,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import app.cash.redwood.widget.Widget
 import io.composelive.nodes.foundation.host.composeui.children.Children
-import io.composelive.nodes.foundation.widget.PullToRefreshBox
-import kotlin.Boolean
+import io.composelive.nodes.foundation.widget.ReuseNode
+import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
-public class ComposeUiPullToRefreshBox(
-  private val factory: AbstractComposeUiCoreWidgetFactory,
-) : PullToRefreshBox<@Composable (UiModifier) -> Unit> {
+public class ComposeUiReuseNode(
+    private val factory: AbstractComposeUiFoundationWidgetFactory,
+) : ReuseNode<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier
 
-  private var isRefreshing: Boolean? by mutableStateOf(null)
-
-  private var onRefresh: (() -> Unit)? by mutableStateOf(null)
+  private var reuseId: String? by mutableStateOf(null)
 
   private val _content: Children = Children()
 
@@ -30,19 +28,14 @@ public class ComposeUiPullToRefreshBox(
     get() = _content
 
   override val `value`: @Composable (UiModifier) -> Unit = { modifier ->
-        this.factory.PullToRefreshBoxBinding(
-          isRefreshing as Boolean,
-          onRefresh as () -> Unit,
+        this.factory.ReuseNodeBinding(
+          reuseId as String,
           _content,
           modifier,
         )
       }
 
-  override fun isRefreshing(isRefreshing: Boolean) {
-    this.isRefreshing = isRefreshing
-  }
-
-  override fun onRefresh(onRefresh: () -> Unit) {
-    this.onRefresh = onRefresh
+  override fun reuseId(reuseId: String) {
+    this.reuseId = reuseId
   }
 }

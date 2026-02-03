@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 
-package io.composelive.nodes.foundation.host.composeui
+package io.composelive.nodes.foundation.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier as UiModifier
 import app.cash.redwood.Modifier as RedwoodModifier
 
 public class ComposeUiReuseRoot(
-  private val factory: AbstractComposeUiCoreWidgetFactory,
+    private val factory: AbstractComposeUiFoundationWidgetFactory,
 ) : ReuseRoot<@Composable (UiModifier) -> Unit> {
   override var modifier: RedwoodModifier = RedwoodModifier
 

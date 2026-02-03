@@ -1,4 +1,4 @@
-package io.composelive.nodes.foundation.host.composeui
+package io.composelive.nodes.foundation.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -51,7 +51,7 @@ import io.composelive.nodes.foundation.widget.Text
 import io.composelive.nodes.foundation.widget.TextField
 import kotlinx.serialization.json.JsonElement
 
-public abstract class AbstractComposeUiCoreWidgetFactory : FoundationWidgetFactory<@Composable (Modifier) -> Unit> {
+public abstract class AbstractComposeUiFoundationWidgetFactory : FoundationWidgetFactory<@Composable (Modifier) -> Unit> {
   @Composable
   public abstract fun BoxBinding(
     onClick: (() -> Unit)?,

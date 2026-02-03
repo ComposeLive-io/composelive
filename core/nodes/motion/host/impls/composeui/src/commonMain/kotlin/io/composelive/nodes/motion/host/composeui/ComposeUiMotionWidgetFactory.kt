@@ -7,6 +7,7 @@ import io.composelive.nodes.foundation.common.MotionProgress
 import io.composelive.nodes.foundation.host.composeui.ComposeChildren
 import io.composelive.nodes.foundation.host.composeui.children.Children
 import io.composelive.nodes.motion.common.MotionScene
+import io.composelive.nodes.motion.composeui.AbstractComposeUiMotionWidgetFactory
 
 public class ComposeUiMotionWidgetFactory : AbstractComposeUiMotionWidgetFactory() {
 

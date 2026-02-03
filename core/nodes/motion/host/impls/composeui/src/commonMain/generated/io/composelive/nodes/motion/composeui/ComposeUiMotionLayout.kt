@@ -1,6 +1,4 @@
-@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-
-package io.composelive.nodes.motion.host.composeui
+package io.composelive.nodes.motion.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

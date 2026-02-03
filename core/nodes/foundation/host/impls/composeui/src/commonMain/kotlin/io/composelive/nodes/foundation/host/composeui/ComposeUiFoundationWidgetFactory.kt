@@ -16,6 +16,7 @@ import io.composelive.nodes.foundation.common.animation.EnterTransition
 import io.composelive.nodes.foundation.common.animation.ExitTransition
 import io.composelive.nodes.foundation.common.lazygrid.GridItemSpan
 import io.composelive.nodes.foundation.common.lazygrid.ScrollItemIndex
+import io.composelive.nodes.foundation.composeui.AbstractComposeUiFoundationWidgetFactory
 import io.composelive.nodes.foundation.host.composeui.children.Children
 import io.composelive.nodes.foundation.host.composeui.modifiers.applyDefaultRedwoodModifier
 import io.composelive.nodes.foundation.host.composeui.modifiers.applyRedwoodModifier
@@ -41,7 +42,7 @@ import kotlinx.serialization.json.JsonElement
 
 public class ComposeUiFoundationWidgetFactory(
     private val imageLoader: ImageLoader,
-) : AbstractComposeUiCoreWidgetFactory() {
+) : AbstractComposeUiFoundationWidgetFactory() {
 
     @Composable
     override fun BoxBinding(

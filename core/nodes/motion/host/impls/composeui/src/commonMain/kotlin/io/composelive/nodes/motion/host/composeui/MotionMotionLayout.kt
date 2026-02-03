@@ -40,7 +40,8 @@ public fun MotionMotionLayout(
     modifier: Modifier,
     content: @Composable MotionLayoutScope.() -> Unit,
 ) {
-    val motionProgressState = if (progress != null) rememberMotionProgressState(progress.id) else null
+    val motionProgressState =
+        if (progress != null) rememberMotionProgressState(progress.id) else null
     MotionLayout(
         motionScene = remember(motionScene) { motionScene?.toMotionScene() ?: MotionScene {} },
         modifier = modifier,

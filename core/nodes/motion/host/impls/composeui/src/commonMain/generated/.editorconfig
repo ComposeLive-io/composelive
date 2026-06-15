@@ -1,0 +1,6 @@
+# Top-most EditorConfig file for this specific folder
+root = true
+
+# Disable formatting for all files in this folder and subfolders
+[*]
+ij_formatter_enabled = false

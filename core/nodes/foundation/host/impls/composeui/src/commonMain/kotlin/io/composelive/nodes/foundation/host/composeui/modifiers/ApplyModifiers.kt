@@ -1,7 +1,10 @@
 package io.composelive.nodes.foundation.host.composeui.modifiers
 
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowColumnScope
+import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,6 +12,16 @@ import app.cash.redwood.Modifier as RedwoodModifier
 
 @Composable
 public fun BoxScope.applyRedwoodModifier(
+    modifier: Modifier,
+    redwoodModifier: RedwoodModifier,
+): Modifier = applyRedwoodModifier(
+    modifier = modifier,
+    redwoodModifier = redwoodModifier,
+    applyElement = { modifier, element -> this.thenApply(modifier, element) },
+)
+
+@Composable
+public fun BoxWithConstraintsScope.applyRedwoodModifier(
     modifier: Modifier,
     redwoodModifier: RedwoodModifier,
 ): Modifier = applyRedwoodModifier(
@@ -29,6 +42,26 @@ public fun ColumnScope.applyRedwoodModifier(
 
 @Composable
 public fun RowScope.applyRedwoodModifier(
+    modifier: Modifier,
+    redwoodModifier: RedwoodModifier,
+): Modifier = applyRedwoodModifier(
+    modifier = modifier,
+    redwoodModifier = redwoodModifier,
+    applyElement = { modifier, element -> this.thenApply(modifier, element) },
+)
+
+@Composable
+public fun FlowRowScope.applyRedwoodModifier(
+    modifier: Modifier,
+    redwoodModifier: RedwoodModifier,
+): Modifier = applyRedwoodModifier(
+    modifier = modifier,
+    redwoodModifier = redwoodModifier,
+    applyElement = { modifier, element -> this.thenApply(modifier, element) },
+)
+
+@Composable
+public fun FlowColumnScope.applyRedwoodModifier(
     modifier: Modifier,
     redwoodModifier: RedwoodModifier,
 ): Modifier = applyRedwoodModifier(

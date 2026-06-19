@@ -1,37 +1,43 @@
-/*
- * Copyright (C) 2022 Square, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.composelive.nodes.foundation.host.composeui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.ColorFilter
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import io.composelive.nodes.foundation.host.composeui.images.LocalImageLoader
+import io.composelive.nodes.foundation.common.Alignment
+import io.composelive.nodes.foundation.common.AsyncImageState
+import io.composelive.nodes.foundation.common.Color
+import io.composelive.nodes.foundation.common.ContentScale
+import io.composelive.nodes.foundation.common.FilterQuality
+import io.composelive.nodes.foundation.host.composeui.images.LocalCliveImageLoader
+import io.composelive.nodes.foundation.host.composeui.local.LocalContentColor
+import kotlin.Float
 
 @Composable
 public fun FoundationAsyncImage(
     model: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier,
+    contentDescription: String?,
+    onState: ((AsyncImageState) -> Unit)?,
+    alignment: Alignment,
+    contentScale: ContentScale,
+    alpha: Float,
+    filterQuality: FilterQuality,
+    clipToBounds: Boolean,
+    tintColor: Color,
 ) {
+    val resolvedTintColor = when {
+        tintColor != Color.Unspecified -> tintColor
+        LocalContentColor.current != Color.Unspecified -> LocalContentColor.current
+        else -> null
+    }
+    val resolvedColorFilter = resolvedTintColor?.let { ColorFilter.tint(it.toColor()) }
     AsyncImage(
         modifier = modifier,
-        contentScale = ContentScale.Crop,
         model = if (model.isNotEmpty()) {
             ImageRequest.Builder(LocalPlatformContext.current)
                 .data(model)
@@ -40,9 +46,25 @@ public fun FoundationAsyncImage(
         } else {
             null
         },
-        imageLoader = requireNotNull(LocalImageLoader.current) {
+        imageLoader = requireNotNull(LocalCliveImageLoader.current) {
             "LocalImageLoader must be set"
         },
-        contentDescription = null,
+        contentDescription = contentDescription,
+        onState = { state ->
+            onState?.invoke(
+                when (state) {
+                    is AsyncImagePainter.State.Empty -> AsyncImageState.Empty
+                    is AsyncImagePainter.State.Loading -> AsyncImageState.Loading
+                    is AsyncImagePainter.State.Success -> AsyncImageState.Success
+                    is AsyncImagePainter.State.Error -> AsyncImageState.Error(state.result.throwable.message)
+                }
+            )
+        },
+        alignment = alignment.toAlignment(),
+        contentScale = contentScale.toContentScale(),
+        alpha = alpha,
+        filterQuality = filterQuality.toFilterQuality(),
+        clipToBounds = clipToBounds,
+        colorFilter = resolvedColorFilter,
     )
 }

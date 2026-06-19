@@ -1,13 +1,17 @@
 package io.composelive.nodes.foundation.host.composeui
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.composelive.nodes.foundation.common.lazygrid.ScrollItemIndex
+import io.composelive.nodes.foundation.common.lazylayout.ScrollRequest
 import io.composelive.nodes.foundation.common.PaddingValues as RedwoodPaddingValues
 
 @Composable
@@ -16,7 +20,7 @@ public fun FoundationPager(
     contentPadding: RedwoodPaddingValues,
     pageChanged: (Int) -> Unit,
     scrollInProgressChanged: (Boolean) -> Unit,
-    programmaticScrollIndex: ScrollItemIndex?,
+    programmaticScrollIndex: ScrollRequest?,
     pageCount: Int,
     item: @Composable (Int) -> Unit,
     modifier: Modifier,
@@ -29,13 +33,19 @@ public fun FoundationPager(
     LaunchedEffect(state.isScrollInProgress) {
         scrollInProgressChanged(state.isScrollInProgress)
     }
+    var lastProgrammaticallyScrolledId: Int? by remember { mutableStateOf(null) }
     LaunchedEffect(programmaticScrollIndex) {
-        val index = programmaticScrollIndex
-        if (index != null) {
-            if (index.animated) {
-                state.animateScrollToPage(index.index)
+        if (programmaticScrollIndex != null &&
+            lastProgrammaticallyScrolledId != programmaticScrollIndex.id
+        ) {
+            lastProgrammaticallyScrolledId = programmaticScrollIndex.id
+            if (programmaticScrollIndex.animated) {
+                state.animateScrollToPage(
+                    page = programmaticScrollIndex.index,
+                    animationSpec = tween(),
+                )
             } else {
-                state.scrollToPage(index.index)
+                state.scrollToPage(programmaticScrollIndex.index)
             }
         }
     }

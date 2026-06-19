@@ -1,6 +1,5 @@
 package io.composelive.nodes.foundation.host.composeui
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -9,13 +8,13 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import io.composelive.nodes.foundation.common.MotionProgress
+import io.composelive.nodes.foundation.common.ScrollProgress
 import io.composelive.nodes.foundation.widget.MotionProgressHolder
 import app.cash.redwood.Modifier as RedwoodModifier
 
 @Composable
 public fun FoundationMotionProgressHolder(
-    progress: MotionProgress?,
+    progress: ScrollProgress?,
     divideScrollBy: Double,
     modifier: Modifier,
     updateState: (MotionProgressState) -> Unit = {}
@@ -27,7 +26,6 @@ public fun FoundationMotionProgressHolder(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @PublishedApi
 internal class FoundationMotionProgressHolder :
     MotionProgressHolder<@Composable (Modifier) -> Unit> {
@@ -36,7 +34,7 @@ internal class FoundationMotionProgressHolder :
 
     internal var state by mutableStateOf<MotionProgressState?>(null)
 
-    internal var progress by mutableStateOf<MotionProgress?>(null)
+    internal var progress by mutableStateOf<ScrollProgress?>(null)
     private var divideScrollBy by mutableDoubleStateOf(-1.0)
 
     override val value: @Composable (Modifier) -> Unit = { modifier ->
@@ -54,7 +52,7 @@ internal class FoundationMotionProgressHolder :
         }
     }
 
-    override fun progress(progress: MotionProgress?) {
+    override fun progress(progress: ScrollProgress?) {
         this.progress = progress
     }
 

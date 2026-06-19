@@ -7,7 +7,7 @@ import app.cash.redwood.Modifier
 import io.composelive.nodes.foundation.common.PaddingValues
 
 @Composable
-public fun HorizontalPager(
+public fun StaticBufferHorizontalPager(
     state: PagerState,
     bufferSize: Int,
     modifier: Modifier = Modifier,
@@ -58,14 +58,16 @@ private inline fun StaticBufferPager(
         contentPadding = contentPadding,
         pageChanged = { index -> state.currentPage = index },
         scrollInProgressChanged = { inProgress -> state.scrollInProgress = inProgress },
-        programmaticScrollIndex = state.programmaticScrollIndex,
-        pageCount = pageCount.coerceAtMost(bufferSize),
+        programmaticScrollRequest = state.programmaticScrollRequest,
+        pageCount = pageCount,
         items = {
             StaticBuffer(
                 count = { pageCount },
                 bufferSize = bufferSize,
             ) { index, inRange ->
-                pageContent(index, inRange)
+                ShallowWrapper {
+                    pageContent(index, inRange)
+                }
             }
         },
     )

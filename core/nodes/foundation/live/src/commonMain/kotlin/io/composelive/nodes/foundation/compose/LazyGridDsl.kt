@@ -1,29 +1,12 @@
-/*
- * Copyright (C) 2023 Square, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.composelive.nodes.foundation.compose
 
 import androidx.compose.runtime.Composable
 import app.cash.redwood.LayoutScopeMarker
 import app.cash.redwood.Modifier
 import io.composelive.nodes.foundation.common.Arrangement
-import io.composelive.nodes.foundation.common.MotionProgress
-import io.composelive.nodes.foundation.common.lazygrid.GridItemSpan
-import io.composelive.nodes.foundation.compose.lazygrid.LazyGrid
-import io.composelive.nodes.foundation.compose.lazygrid.LazyGridState
-import io.composelive.nodes.foundation.compose.lazygrid.rememberLazyGridState
+import io.composelive.nodes.foundation.common.ScrollProgress
+import io.composelive.nodes.foundation.common.lazylayout.grid.GridItemSpan
+import io.composelive.nodes.foundation.compose.lazylayout.grid.LazyGrid
 
 /**
  * Receiver scope which is used by [LazyVerticalGrid] and [LazyHorizontalGrid].
@@ -125,24 +108,14 @@ public inline fun <T> LazyGridScope.itemsIndexed(
     },
 )
 
-@RequiresOptIn("This Redwood LazyLayout API is experimental and may change in the future.")
-public annotation class ExperimentalRedwoodLazyLayoutApi
-
 /**
  * The horizontally scrolling list that only composes and lays out the currently visible items.
  * The [content] block defines a DSL which allows you to emit items of different types. For
  * example, you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
  * a list of items.
  *
- * The purpose of [placeholder] is to define the temporary content of an on-screen item while the
- * content of that item (as described by the [content] block) is being retrieved. When the content
- * of that item has been retrieved, the [placeholder] is replaced with that of the content.
- *
  * @param state The state object to be used to control or observe the list's state.
  * @param modifier The modifier to apply to this layout.
- * @param placeholder A block which describes the content of each placeholder item. Note that the
- * placeholder block will be invoked multiple times, and assumes that the content and its sizing on
- * each invocation is identical to one another.
  * @param content A block which describes the content. Inside this block you can use methods like
  * [LazyGridScope.item] to add a single item or [LazyGridScope.items] to add a list of items.
  */
@@ -151,9 +124,9 @@ public fun LazyHorizontalGrid(
     modifier: Modifier = Modifier,
     state: LazyGridState = rememberLazyGridState(),
     rows: Int = 1,
-    horizontalArrangement: Arrangement? = null,
-    verticalArrangement: Arrangement? = null,
-    boundMotionProgress: MotionProgress? = null,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    boundScrollProgress: ScrollProgress? = null,
     content: LazyGridScope.() -> Unit,
 ) {
     LazyGrid(
@@ -162,7 +135,7 @@ public fun LazyHorizontalGrid(
         chunks = rows,
         horizontalArrangement = horizontalArrangement,
         verticalArrangement = verticalArrangement,
-        boundMotionProgress = boundMotionProgress,
+        boundScrollProgress = boundScrollProgress,
         modifier = modifier,
         content = content,
     )
@@ -174,15 +147,8 @@ public fun LazyHorizontalGrid(
  * example, you can use [LazyGridScope.item] to add a single item and [LazyGridScope.items] to add
  * a list of items.
  *
- * The purpose of [placeholder] is to define the temporary content of an on-screen item while the
- * content of that item (as described by the [content] block) is being retrieved. When the content
- * of that item has been retrieved, the [placeholder] is replaced with that of the content.
- *
  * @param state The state object to be used to control or observe the list's state.
  * @param modifier The modifier to apply to this layout.
- * @param placeholder A block which describes the content of each placeholder item. Note that the
- * placeholder block will be invoked multiple times, and assumes that the content and its sizing on
- * each invocation is identical to one another.
  * @param content A block which describes the content. Inside this block you can use methods like
  * [LazyGridScope.item] to add a single item or [LazyGridScope.items] to add a list of items.
  */
@@ -191,9 +157,9 @@ public fun LazyVerticalGrid(
     modifier: Modifier = Modifier,
     state: LazyGridState = rememberLazyGridState(),
     columns: Int = 1,
-    horizontalArrangement: Arrangement? = null,
-    verticalArrangement: Arrangement? = null,
-    boundMotionProgress: MotionProgress? = null,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    boundScrollProgress: ScrollProgress? = null,
     content: LazyGridScope.() -> Unit,
 ) {
     LazyGrid(
@@ -202,7 +168,7 @@ public fun LazyVerticalGrid(
         chunks = columns,
         horizontalArrangement = horizontalArrangement,
         verticalArrangement = verticalArrangement,
-        boundMotionProgress = boundMotionProgress,
+        boundScrollProgress = boundScrollProgress,
         modifier = modifier,
         content = content,
     )

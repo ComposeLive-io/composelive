@@ -4,55 +4,75 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import app.cash.redwood.ui.Margin
-import coil3.ImageLoader
+import app.cash.redwood.ui.Size
+import app.cash.redwood.widget.compose.ComposeWidgetChildren
+import io.composelive.nodes.foundation.common.Alignment
+import io.composelive.nodes.foundation.common.AnnotatedString
+import io.composelive.nodes.foundation.common.AnnotatedStringRange
 import io.composelive.nodes.foundation.common.Arrangement
+import io.composelive.nodes.foundation.common.AsyncImageState
+import io.composelive.nodes.foundation.common.BorderStroke
 import io.composelive.nodes.foundation.common.ButtonColors
+import io.composelive.nodes.foundation.common.ButtonElevation
 import io.composelive.nodes.foundation.common.Color
-import io.composelive.nodes.foundation.common.MotionProgress
+import io.composelive.nodes.foundation.common.Constraints
+import io.composelive.nodes.foundation.common.ContentScale
+import io.composelive.nodes.foundation.common.FilterQuality
+import io.composelive.nodes.foundation.common.KeyboardActions
+import io.composelive.nodes.foundation.common.KeyboardOptions
+import io.composelive.nodes.foundation.common.LayoutMetadata
+import io.composelive.nodes.foundation.common.ScrollProgress
 import io.composelive.nodes.foundation.common.Shape
+import io.composelive.nodes.foundation.common.TextFieldLineLimits
 import io.composelive.nodes.foundation.common.TextFieldValue
+import io.composelive.nodes.foundation.common.TextLayoutResult
+import io.composelive.nodes.foundation.common.TextOverflow
 import io.composelive.nodes.foundation.common.TextStyle
 import io.composelive.nodes.foundation.common.animation.EnterTransition
 import io.composelive.nodes.foundation.common.animation.ExitTransition
-import io.composelive.nodes.foundation.common.lazygrid.GridItemSpan
-import io.composelive.nodes.foundation.common.lazygrid.ScrollItemIndex
+import io.composelive.nodes.foundation.common.lazylayout.ScrollRequest
+import io.composelive.nodes.foundation.common.lazylayout.grid.GridItemSpan
 import io.composelive.nodes.foundation.composeui.AbstractComposeUiFoundationWidgetFactory
-import io.composelive.nodes.foundation.host.composeui.children.Children
 import io.composelive.nodes.foundation.host.composeui.modifiers.applyDefaultRedwoodModifier
 import io.composelive.nodes.foundation.host.composeui.modifiers.applyRedwoodModifier
 import io.composelive.nodes.foundation.modifier.Alpha
 import io.composelive.nodes.foundation.modifier.AspectRatio
 import io.composelive.nodes.foundation.modifier.Background
+import io.composelive.nodes.foundation.modifier.BrushBackground
+import io.composelive.nodes.foundation.modifier.Clickable
 import io.composelive.nodes.foundation.modifier.Clip
 import io.composelive.nodes.foundation.modifier.DefaultMinSize
 import io.composelive.nodes.foundation.modifier.FillMaxHeight
 import io.composelive.nodes.foundation.modifier.FillMaxWidth
 import io.composelive.nodes.foundation.modifier.Height
+import io.composelive.nodes.foundation.modifier.HorizontalScroll
 import io.composelive.nodes.foundation.modifier.LayoutId
 import io.composelive.nodes.foundation.modifier.Padding
 import io.composelive.nodes.foundation.modifier.Shimmer
 import io.composelive.nodes.foundation.modifier.Width
 import io.composelive.nodes.foundation.modifier.WrapContentHeight
 import io.composelive.nodes.foundation.widget.LazyGrid
-import io.composelive.nodes.foundation.widget.LazyItems
+import io.composelive.nodes.foundation.widget.LazyGridItems
+import io.composelive.nodes.foundation.widget.LazyList
+import io.composelive.nodes.foundation.widget.LazyListItems
 import io.composelive.nodes.foundation.widget.MotionProgressHolder
+import io.composelive.nodes.foundation.widget.RenderedEffectLauncher
 import io.composelive.nodes.foundation.widget.ReuseNode
 import io.composelive.nodes.foundation.widget.ReuseRoot
-import kotlinx.serialization.json.JsonElement
 
-public class ComposeUiFoundationWidgetFactory(
-    private val imageLoader: ImageLoader,
-) : AbstractComposeUiFoundationWidgetFactory() {
+public open class ComposeUiFoundationWidgetFactory : AbstractComposeUiFoundationWidgetFactory() {
 
     @Composable
     override fun BoxBinding(
-        onClick: (() -> Unit)?,
-        content: Children,
-        modifier: Modifier,
+        contentAlignment: Alignment,
+        propagateMinConstraints: Boolean,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
     ) {
         FoundationBox(
-            onClick = onClick,
             modifier = modifier,
+            contentAlignment = contentAlignment,
+            propagateMinConstraints = propagateMinConstraints
         ) {
             ComposeChildren(content) { widget ->
                 applyRedwoodModifier(Modifier, widget.modifier)
@@ -61,11 +81,46 @@ public class ComposeUiFoundationWidgetFactory(
     }
 
     @Composable
-    override fun ColumnBinding(
-        content: Children,
-        modifier: Modifier,
+    override fun AsyncBoxWithConstraintsBinding(
+        contentAlignment: Alignment,
+        propagateMinConstraints: Boolean,
+        constraintsChanged: (Constraints) -> Unit,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
     ) {
-        FoundationColumn(modifier = modifier) {
+        FoundationAsyncBoxWithConstraints(
+            modifier = modifier,
+            contentAlignment = contentAlignment,
+            propagateMinConstraints = propagateMinConstraints,
+            constraintsChanged = constraintsChanged,
+        ) {
+            val constraints = Constraints(
+                minWidth = minWidth.toRedwoodDp(),
+                maxWidth = maxWidth.toRedwoodDp(),
+                minHeight = minHeight.toRedwoodDp(),
+                maxHeight = maxHeight.toRedwoodDp(),
+            )
+            LaunchedEffect(constraints) {
+                constraintsChanged(constraints)
+            }
+            ComposeChildren(content) { widget ->
+                applyRedwoodModifier(Modifier, widget.modifier)
+            }
+        }
+    }
+
+    @Composable
+    override fun ColumnBinding(
+        verticalArrangement: Arrangement.Vertical,
+        horizontalAlignment: Alignment.Horizontal,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
+    ) {
+        FoundationColumn(
+            modifier = modifier,
+            verticalArrangement = verticalArrangement,
+            horizontalAlignment = horizontalAlignment
+        ) {
             ComposeChildren(content) { widget ->
                 applyRedwoodModifier(Modifier, widget.modifier)
             }
@@ -74,10 +129,64 @@ public class ComposeUiFoundationWidgetFactory(
 
     @Composable
     override fun RowBinding(
-        content: Children,
-        modifier: Modifier,
+        horizontalArrangement: Arrangement.Horizontal,
+        verticalAlignment: Alignment.Vertical,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
     ) {
-        FoundationRow(modifier = modifier) {
+        FoundationRow(
+            modifier = modifier,
+            horizontalArrangement = horizontalArrangement,
+            verticalAlignment = verticalAlignment
+        ) {
+            ComposeChildren(content) { widget ->
+                applyRedwoodModifier(Modifier, widget.modifier)
+            }
+        }
+    }
+
+    @Composable
+    override fun FlowRowBinding(
+        horizontalArrangement: Arrangement.Horizontal,
+        verticalArrangement: Arrangement.Vertical,
+        maxItemsInEachRow: Int,
+        maxLines: Int,
+        itemVerticalAlignment: Alignment.Vertical,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
+    ) {
+        FoundationFlowRow(
+            modifier = modifier,
+            horizontalArrangement = horizontalArrangement,
+            verticalArrangement = verticalArrangement,
+            maxItemsInEachRow = maxItemsInEachRow,
+            maxLines = maxLines,
+            itemVerticalAlignment = itemVerticalAlignment,
+        ) {
+            ComposeChildren(content) { widget ->
+                applyRedwoodModifier(Modifier, widget.modifier)
+            }
+        }
+    }
+
+    @Composable
+    override fun FlowColumnBinding(
+        verticalArrangement: Arrangement.Vertical,
+        horizontalArrangement: Arrangement.Horizontal,
+        maxItemsInEachColumn: Int,
+        maxLines: Int,
+        itemHorizontalAlignment: Alignment.Horizontal,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
+    ) {
+        FoundationFlowColumn(
+            modifier = modifier,
+            verticalArrangement = verticalArrangement,
+            horizontalArrangement = horizontalArrangement,
+            maxItemsInEachColumn = maxItemsInEachColumn,
+            maxLines = maxLines,
+            itemHorizontalAlignment = itemHorizontalAlignment,
+        ) {
             ComposeChildren(content) { widget ->
                 applyRedwoodModifier(Modifier, widget.modifier)
             }
@@ -92,78 +201,44 @@ public class ComposeUiFoundationWidgetFactory(
     @Composable
     override fun LazyGridBinding(
         isVertical: Boolean,
-        onViewportChanged: (Int, Int, Int) -> Unit,
-        lastReceivedViewportChangedId: Int,
-        scrollItemIndex: ScrollItemIndex?,
+        visibleItemsChanged: (
+            firstIndex: Int,
+            lastIndex: Int,
+            changeId: Int,
+        ) -> Unit,
+        lastReceivedVisibleItemsChangedId: Int,
+        programmaticScrollRequest: ScrollRequest?,
         chunks: Int,
-        horizontalArrangement: Arrangement?,
-        verticalArrangement: Arrangement?,
-        boundMotionProgress: MotionProgress?,
-        items: Children,
+        horizontalArrangement: Arrangement.Horizontal,
+        verticalArrangement: Arrangement.Vertical,
+        boundScrollProgress: ScrollProgress?,
+        items: ComposeWidgetChildren,
         modifier: Modifier
     ) {
-        TODO("Not yet implemented")
+        error("LazyGrid is redefined")
     }
 
     @Composable
-    override fun LazyItemsBinding(
+    override fun LazyGridItemsBinding(
         itemsBefore: Int,
         itemsAfter: Int,
         span: GridItemSpan?,
-        placeholder: Children,
-        items: Children,
+        placeholder: ComposeWidgetChildren,
+        items: ComposeWidgetChildren,
         modifier: Modifier
     ) {
-        TODO("Not yet implemented")
+        error("LazyGridItems is redefined")
     }
-
-//    @Composable
-//    override fun LazyGridBinding(
-//        isVertical: Boolean,
-//        onViewportChanged: (Int, Int) -> Unit,
-//        scrollIndex: ScrollItemIndex,
-//        chunks: Int,
-//        horizontalArrangement: Arrangement?,
-//        verticalArrangement: Arrangement?,
-//        spans: List<GridItemSpan>,
-//        boundMotionProgress: MotionProgress?,
-//        items: Children,
-//        modifier: Modifier,
-//    ) {
-//        val spans = spans.toImmutableList()
-//        CoreLazyGrid(
-//            isVertical = isVertical,
-//            onViewportChanged = onViewportChanged,
-//            programmaticScrollIndex = programmaticScrollIndex,
-//            chunks = chunks,
-//            horizontalArrangement = horizontalArrangement,
-//            verticalArrangement = verticalArrangement,
-//            boundMotionProgress = boundMotionProgress,
-//            modifier = modifier,
-//            content = lazyGridItems(
-//                itemCount = items.widgets.size,
-//                spans = spans,
-//                isStickyHeader = { index ->
-//                    val widget = items.widgets[index]
-//                    isStickyHeader(widget)
-//                },
-//                item = { index ->
-//                    val widget = items.widgets[index]
-//                    widget.value.invoke(applyDefaultRedwoodModifier(Modifier, widget.modifier))
-//                },
-//            ),
-//        )
-//    }
 
     @Composable
     override fun PagerBinding(
         isVertical: Boolean,
         contentPadding: Margin,
-        pageChanged: (Int) -> Unit,
+        pageChanged: (index: Int) -> Unit,
         scrollInProgressChanged: (Boolean) -> Unit,
-        programmaticScrollIndex: ScrollItemIndex?,
+        programmaticScrollRequest: ScrollRequest?,
         pageCount: Int,
-        items: Children,
+        items: ComposeWidgetChildren,
         modifier: Modifier
     ) {
         FoundationPager(
@@ -171,10 +246,12 @@ public class ComposeUiFoundationWidgetFactory(
             contentPadding = contentPadding,
             pageChanged = pageChanged,
             scrollInProgressChanged = scrollInProgressChanged,
-            programmaticScrollIndex = programmaticScrollIndex,
+            programmaticScrollIndex = programmaticScrollRequest,
             pageCount = pageCount,
-            item = { index ->
-                val widget = items.widgets[index]
+            item = item@{ index ->
+                val pageWidgets = items.widgets
+                if (pageWidgets.isEmpty()) return@item
+                val widget = pageWidgets[index % pageWidgets.size]
                 widget.value(applyDefaultRedwoodModifier(Modifier, widget.modifier))
             },
             modifier = modifier,
@@ -182,79 +259,32 @@ public class ComposeUiFoundationWidgetFactory(
     }
 
     @Composable
-    override fun PullToRefreshBoxBinding(
-        isRefreshing: Boolean,
-        onRefresh: () -> Unit,
-        content: Children,
-        modifier: Modifier,
-    ) {
-        FoundationPullToRefreshBox(
-            isRefreshing = isRefreshing,
-            onRefresh = onRefresh,
-            modifier = modifier,
-        ) {
-            ComposeChildren(content) { widget ->
-                applyRedwoodModifier(Modifier, widget.modifier)
-            }
-        }
-    }
-
-    @Composable
-    override fun ScaffoldBinding(
-        paddingValuesChanged: (Margin) -> Unit,
-        topBar: Children,
-        bottomBar: Children,
-        floatingActionButton: Children,
-        content: Children,
-        modifier: Modifier,
-    ) {
-        FoundationScaffold(
-            paddingValuesChanged = paddingValuesChanged,
-            modifier = modifier,
-            topBar = {
-                ComposeChildren(topBar)
-            },
-            bottomBar = {
-                ComposeChildren(bottomBar)
-            },
-            floatingActionButton = {
-                ComposeChildren(floatingActionButton)
-            },
-            content = { paddingValues ->
-                LaunchedEffect(paddingValues) {
-                    paddingValuesChanged(paddingValues.toRedwoodPaddingValues())
-                }
-                ComposeChildren(content)
-            },
-        )
-    }
-
-    @Composable
     override fun MotionProgressHolderBinding(
-        progress: MotionProgress?,
+        progress: ScrollProgress?,
         divideScrollBy: Double,
-        modifier: Modifier
+        modifier: Modifier,
     ) {
-        throw AssertionError("MotionProgressHolder is redefined")
+        error("MotionProgressHolder is redefined")
     }
 
     @Composable
     override fun ReuseRootBinding(
-        addNode: (reuseId: String, type: String, payload: JsonElement?) -> Unit,
-        removeNode: (reuseId: String) -> Unit,
-        content: Children,
+        addNode: (instanceId: String, metadata: LayoutMetadata, payload: String?) -> Unit,
+        removeNode: (instanceId: String) -> Unit,
+        content: ComposeWidgetChildren,
         modifier: Modifier
     ) {
-        throw AssertionError("ReuseRootBinding is redefined")
+        error("ReuseRootBinding is redefined")
     }
 
     @Composable
     override fun ReuseNodeBinding(
-        reuseId: String,
-        content: Children,
+        instanceId: String,
+        viewSizeChanged: (Size) -> Unit,
+        content: ComposeWidgetChildren,
         modifier: Modifier
     ) {
-        throw AssertionError("ReuseNodeBinding is redefined")
+        error("ReuseNodeBinding is redefined")
     }
 
     override fun MotionProgressHolder(): MotionProgressHolder<@Composable ((Modifier) -> Unit)> =
@@ -265,8 +295,8 @@ public class ComposeUiFoundationWidgetFactory(
         visible: Boolean,
         enter: EnterTransition,
         exit: ExitTransition,
-        content: Children,
-        modifier: Modifier,
+        content: ComposeWidgetChildren,
+        modifier: Modifier
     ) {
         FoundationAnimatedVisibility(
             visible = visible,
@@ -279,21 +309,37 @@ public class ComposeUiFoundationWidgetFactory(
     }
 
     @Composable
+    override fun ClickReceiverBinding(id: Int, action: () -> Unit, modifier: Modifier) {
+        FoundationClickReceiver(id, action)
+    }
+
+    @Composable
     override fun TextFieldBinding(
         state: TextFieldValue,
-        hint: String,
-        style: TextStyle,
-        hintStyle: TextStyle?,
         onChange: ((TextFieldValue) -> Unit)?,
-        modifier: Modifier,
+        enabled: Boolean,
+        readOnly: Boolean,
+        textStyle: TextStyle,
+        keyboardOptions: KeyboardOptions,
+        keyboardActions: KeyboardActions,
+        lineLimits: TextFieldLineLimits,
+        decorationBox: ComposeWidgetChildren,
+        modifier: Modifier
     ) {
         FoundationTextField(
             state = state,
-            hint = hint,
-            style = style,
-            hintStyle = hintStyle,
-            onChange = onChange,
             modifier = modifier,
+            onChange = onChange,
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            lineLimits = lineLimits,
+            decorationBox = { textField ->
+                ComposeChildren(decorationBox)
+                textField()
+            },
         )
     }
 
@@ -301,20 +347,74 @@ public class ComposeUiFoundationWidgetFactory(
     override fun TextBinding(
         text: String,
         style: TextStyle,
-        modifier: Modifier,
+        overflow: TextOverflow,
+        softWrap: Boolean,
+        maxLines: Int,
+        minLines: Int,
+        onTextLayout: (TextLayoutResult) -> Unit,
+        modifier: Modifier
     ) {
         FoundationText(
             text = text,
-            style = style,
             modifier = modifier,
+            overflow = overflow,
+            softWrap = softWrap,
+            maxLines = maxLines,
+            minLines = minLines,
+            style = style,
+            onTextLayout = onTextLayout
         )
     }
 
     @Composable
-    override fun AsyncImageBinding(model: String, modifier: Modifier) {
+    override fun AnnotatedTextBinding(
+        text: AnnotatedString,
+        style: TextStyle,
+        overflow: TextOverflow,
+        softWrap: Boolean,
+        maxLines: Int,
+        minLines: Int,
+        onTextLayout: (TextLayoutResult) -> Unit,
+        onTextClick: (AnnotatedStringRange) -> Unit,
+        modifier: Modifier
+    ) {
+        FoundationAnnotatedText(
+            text = text,
+            modifier = modifier,
+            overflow = overflow,
+            softWrap = softWrap,
+            maxLines = maxLines,
+            minLines = minLines,
+            style = style,
+            onTextLayout = onTextLayout,
+            onTextClick = onTextClick,
+        )
+    }
+
+    @Composable
+    override fun AsyncImageBinding(
+        model: String,
+        contentDescription: String?,
+        onState: ((AsyncImageState) -> Unit)?,
+        alignment: Alignment,
+        contentScale: ContentScale,
+        alpha: Float,
+        filterQuality: FilterQuality,
+        clipToBounds: Boolean,
+        tintColor: Color,
+        modifier: Modifier
+    ) {
         FoundationAsyncImage(
             model = model,
             modifier = modifier,
+            contentDescription = contentDescription,
+            onState = onState,
+            alignment = alignment,
+            contentScale = contentScale,
+            alpha = alpha,
+            filterQuality = filterQuality,
+            clipToBounds = clipToBounds,
+            tintColor = tintColor,
         )
     }
 
@@ -323,8 +423,11 @@ public class ComposeUiFoundationWidgetFactory(
         enabled: Boolean,
         shape: Shape?,
         colors: ButtonColors,
-        onClick: (() -> Unit)?,
-        content: Children,
+        onClick: () -> Unit,
+        border: BorderStroke?,
+        contentPadding: Margin?,
+        elevation: ButtonElevation?,
+        content: ComposeWidgetChildren,
         modifier: Modifier
     ) {
         FoundationButton(
@@ -332,6 +435,9 @@ public class ComposeUiFoundationWidgetFactory(
             shape = shape,
             colors = colors,
             onClick = onClick,
+            border = border,
+            contentPadding = contentPadding,
+            elevation = elevation,
             modifier = modifier,
         ) {
             ComposeChildren(content)
@@ -339,32 +445,60 @@ public class ComposeUiFoundationWidgetFactory(
     }
 
     @Composable
-    override fun FloatingActionButtonBinding(
-        onClick: (() -> Unit)?,
-        shape: Shape?,
-        containerColor: Color?,
-        contentColor: Color?,
-        content: Children,
+    override fun LazyListBinding(
+        isVertical: Boolean,
+        visibleItemsChanged: (
+            firstIndex: Int,
+            lastIndex: Int,
+            changeId: Int,
+        ) -> Unit,
+        lastReceivedVisibleItemsChangedId: Int,
+        boundScrollProgress: ScrollProgress?,
+        programmaticScrollRequest: ScrollRequest?,
+        contentPadding: Margin?,
+        reverseLayout: Boolean,
+        horizontalArrangement: Arrangement.Horizontal,
+        verticalArrangement: Arrangement.Vertical,
+        horizontalAlignment: Alignment.Horizontal,
+        verticalAlignment: Alignment.Vertical,
+        userScrollEnabled: Boolean,
+        items: ComposeWidgetChildren,
         modifier: Modifier
     ) {
-        FoundationFloatingActionButton(
-            onClick = onClick,
-            shape = shape,
-            containerColor = containerColor,
-            contentColor = contentColor,
-            modifier = modifier,
-        ) {
-            ComposeChildren(content)
+        error("LazyRow is redefined")
+    }
+
+    @Composable
+    override fun LazyListItemsBinding(
+        itemsBefore: Int,
+        itemsAfter: Int,
+        placeholder: ComposeWidgetChildren,
+        items: ComposeWidgetChildren,
+        modifier: Modifier
+    ) {
+        error("LazyRowItems is redefined")
+    }
+
+    @Composable
+    override fun SelectionContainerBinding(content: ComposeWidgetChildren, modifier: Modifier) {
+        FoundationSelectionContainer(modifier = modifier) {
+            ComposeChildren(content) { widget ->
+                applyDefaultRedwoodModifier(Modifier, widget.modifier)
+            }
         }
     }
 
     @Composable
-    override fun RootBinding(
-        content: Children,
-        modifier: Modifier,
+    override fun RenderedEffectLauncherBinding(
+        renderedChanged: (Boolean) -> Unit,
+        modifier: Modifier
     ) {
-        require(content.widgets.size <= 1) { "Root can have maximum 1 child" }
-        FoundationRoot(modifier = modifier, imageLoader = imageLoader) {
+        error("RenderedEffectLauncherBinding is redefined")
+    }
+
+    @Composable
+    override fun ShallowWrapperBinding(content: ComposeWidgetChildren, modifier: Modifier) {
+        FoundationShallowWrapper(modifier) {
             ComposeChildren(content) { widget ->
                 applyDefaultRedwoodModifier(modifier, widget.modifier)
             }
@@ -462,12 +596,33 @@ public class ComposeUiFoundationWidgetFactory(
         // Do nothing
     }
 
+    override fun HorizontalScroll(
+        value: @Composable ((Modifier) -> Unit),
+        modifier: HorizontalScroll
+    ) {
+        // Do nothing
+    }
+
+    override fun BrushBackground(
+        value: @Composable ((Modifier) -> Unit),
+        modifier: BrushBackground
+    ) {
+        // Do nothing
+    }
+
+    override fun Clickable(
+        value: @Composable ((Modifier) -> Unit),
+        modifier: Clickable
+    ) {
+        // Do nothing
+    }
+
     override fun LazyGrid(): LazyGrid<@Composable ((Modifier) -> Unit)> {
         return FoundationLazyGrid()
     }
 
-    override fun LazyItems(): LazyItems<@Composable ((Modifier) -> Unit)> {
-        return FoundationLazyItems()
+    override fun LazyGridItems(): LazyGridItems<@Composable ((Modifier) -> Unit)> {
+        return FoundationLazyGridItems()
     }
 
     override fun ReuseRoot(): ReuseRoot<@Composable ((Modifier) -> Unit)> {
@@ -476,5 +631,17 @@ public class ComposeUiFoundationWidgetFactory(
 
     override fun ReuseNode(): ReuseNode<@Composable ((Modifier) -> Unit)> {
         return FoundationReuseNode()
+    }
+
+    override fun LazyList(): LazyList<@Composable ((Modifier) -> Unit)> {
+        return FoundationLazyList()
+    }
+
+    override fun LazyListItems(): LazyListItems<@Composable ((Modifier) -> Unit)> {
+        return FoundationLazyListItems()
+    }
+
+    override fun RenderedEffectLauncher(): RenderedEffectLauncher<@Composable ((Modifier) -> Unit)> {
+        return FoundationRenderedEffectLauncher()
     }
 }

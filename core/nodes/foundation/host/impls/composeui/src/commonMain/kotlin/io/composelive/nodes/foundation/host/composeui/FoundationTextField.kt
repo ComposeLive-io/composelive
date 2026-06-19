@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2022 Square, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.composelive.nodes.foundation.host.composeui
 
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,20 +8,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import io.composelive.nodes.foundation.common.MultiLine
+import io.composelive.nodes.foundation.common.SingleLine
+import io.composelive.nodes.foundation.common.KeyboardActions as RedwoodKeyboardActions
+import io.composelive.nodes.foundation.common.KeyboardOptions as RedwoodKeyboardOptions
+import io.composelive.nodes.foundation.common.TextFieldLineLimits
 import io.composelive.nodes.foundation.common.TextFieldValue as RedwoodTextFieldValue
 import io.composelive.nodes.foundation.common.TextStyle as RedwoodTextStyle
 
 @Composable
 public fun FoundationTextField(
     state: RedwoodTextFieldValue,
-    hint: String,
-    style: RedwoodTextStyle,
-    hintStyle: RedwoodTextStyle?,
     onChange: ((RedwoodTextFieldValue) -> Unit)?,
     modifier: Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    textStyle: RedwoodTextStyle,
+    keyboardOptions: RedwoodKeyboardOptions,
+    keyboardActions: RedwoodKeyboardActions,
+    lineLimits: TextFieldLineLimits,
+    decorationBox: @Composable (innerTextField: @Composable () -> Unit) -> Unit =
+        @Composable { innerTextField -> innerTextField() },
 ) {
     // Preserve 'composition' and other state properties that we don't modify.
     var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
@@ -84,36 +76,24 @@ public fun FoundationTextField(
         }
     }
 
-    val style = remember(style) { style.toTextStyle() }
-    TextField(
+    val style = remember(textStyle) { textStyle.toTextStyle() }
+    val singleLine = lineLimits is SingleLine
+    BasicTextField(
         modifier = modifier,
         value = textFieldValue.copy(
             text = fieldState.text,
             selection = TextRange(fieldState.selectionStart, fieldState.selectionEnd),
         ),
         textStyle = style,
-        placeholder = {
-            if (hint.isNotEmpty()) {
-                Text(
-                    text = hint,
-                    style = remember(hintStyle) { hintStyle?.toTextStyle() ?: style },
-                )
-            }
-        },
-        singleLine = true,
+        keyboardOptions = keyboardOptions.toKeyboardOptions(),
+        keyboardActions = keyboardActions.toKeyboardActions(),
+        singleLine = singleLine,
+        maxLines = if (singleLine) 1 else (lineLimits as MultiLine).maxHeightInLines,
+        minLines = if (singleLine) 1 else (lineLimits as MultiLine).minHeightInLines,
         onValueChange = { newValue ->
             textFieldValue = newValue
             stateChanged(newValue)
         },
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = style.color,
-            unfocusedTextColor = style.color,
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            errorContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        )
+        decorationBox = decorationBox
     )
 }

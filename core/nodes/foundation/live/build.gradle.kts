@@ -7,11 +7,6 @@ plugins {
 kotlin {
     explicitApi()
 
-    jvm()
-    iosArm64()
-    iosX64()
-    iosSimulatorArm64()
-
     js {
         browser()
     }
@@ -24,6 +19,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(libs.kotlinxSerializationJson)
+                api(projects.core.nodes.foundation.common)
 
                 implementation(projects.core.nodes.foundation.generated.widget)
                 implementation(libs.androidxCollection)

@@ -16,7 +16,7 @@ public data class Shape(
         public val topStart: Dp = 0.dp,
         public val topEnd: Dp = 0.dp,
         public val bottomEnd: Dp = 0.dp,
-        public val bottomStart: Dp = 0.dp
+        public val bottomStart: Dp = 0.dp,
     ) {
         public constructor(size: Dp) : this(
             topStart = size,
@@ -38,7 +38,7 @@ public fun RoundedCornerShape(
     topStart: Dp = 0.dp,
     topEnd: Dp = 0.dp,
     bottomEnd: Dp = 0.dp,
-    bottomStart: Dp = 0.dp
+    bottomStart: Dp = 0.dp,
 ): Shape = Shape(
     roundedCorner = Shape.RoundedCorner(
         topStart = topStart,
